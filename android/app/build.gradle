@@ -16,7 +16,7 @@ android {
         versionCode((project.findProperty('vCode') ?: '1') as int)
         versionName(project.findProperty('vName') ?: '1.0')
         // Adresse GitHub Pages chargée par l'application (le workflow la calcule tout seul).
-        resValue 'string', 'app_url', (project.findProperty('appUrl') ?: 'https://brian-1844.github.io/te-ohipa/')
+        resValue 'string', 'app_url', (project.findProperty('appUrl') ?: 'https://te-ohipa.github.io/te-ohipa/')
     }
     signingConfigs {
         release {
