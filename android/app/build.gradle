@@ -1,0 +1,35 @@
+plugins { id 'com.android.application' }
+
+// Copie le site (racine du dépôt) dans l'APK : secours si le téléphone n'a jamais eu de réseau.
+tasks.register('copyWeb', Copy) {
+    from('../..') { include 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'version.json' }
+    into layout.buildDirectory.dir('web/www')
+}
+
+android {
+    namespace 'pf.fenua.ohipa'
+    compileSdk 34
+    defaultConfig {
+        applicationId 'pf.fenua.ohipa'
+        minSdk 23
+        targetSdk 34
+        versionCode((project.findProperty('vCode') ?: '1') as int)
+        versionName(project.findProperty('vName') ?: '1.0')
+        // Adresse GitHub Pages chargée par l'application (le workflow la calcule tout seul).
+        resValue 'string', 'app_url', (project.findProperty('appUrl') ?: 'https://brian-1844.github.io/te-ohipa/')
+    }
+    signingConfigs {
+        release {
+            // Clé fournie par les Secrets GitHub si elle existe, sinon la clé de test du dépôt.
+            storeFile file(System.getenv('KS_FILE') ?: '../fenua-test.keystore')
+            storePassword(System.getenv('KS_PASS') ?: 'cadrefenua')
+            keyAlias(System.getenv('KS_ALIAS') ?: 'fenua')
+            keyPassword(System.getenv('KS_PASS') ?: 'cadrefenua')
+        }
+    }
+    buildTypes { release { minifyEnabled false; signingConfig signingConfigs.release } }
+    compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+    sourceSets { main { assets.srcDirs = [layout.buildDirectory.dir('web')] } }
+    lint { checkReleaseBuilds false; abortOnError false }
+}
+preBuild.dependsOn 'copyWeb'
