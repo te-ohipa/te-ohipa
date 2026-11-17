@@ -67,7 +67,7 @@ details.card summary{cursor:pointer}select{font:inherit;padding:6px;border-radiu
 .tag{display:inline-block;background:var(--lag2);color:var(--lag);border-radius:20px;padding:2px 10px;font-size:12.5px;font-weight:700}
 .warn{border-left:4px solid var(--gold)}
 a{color:var(--lag)}
-.chg{float:right;border:1px solid var(--line);background:var(--card);color:var(--lag);border-radius:999px;padding:6px 12px;font-size:13.5px;font-weight:700;margin-top:6px}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}.tile{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;background:var(--card,#fff);border:1px solid var(--line);border-radius:16px;padding:14px;font:inherit;color:inherit;cursor:pointer;min-height:104px}.tile[hidden]{display:none}.tile span{font-size:26px}.tile b{font-size:15.5px}.tile small{color:var(--mut);font-size:12.5px;line-height:1.3}.tile:active{transform:scale(.98)}.vgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0 14px}.vt{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-align:left;font:inherit;color:inherit;cursor:pointer;background:var(--card,#fff);border:1px solid var(--line);border-top:6px solid var(--c);border-radius:16px;padding:12px 12px 14px;min-height:150px}.vt .vi{font-size:24px;width:44px;height:44px;border-radius:12px;background:var(--c2);display:flex;align-items:center;justify-content:center;margin-bottom:4px}.vt b{font-size:15.5px;line-height:1.25}.vt small{color:var(--mut);font-size:12.5px;line-height:1.3}.vt em{position:absolute;top:10px;right:10px;font-style:normal;font-size:11px;font-weight:700;background:#fff4c2;color:#7a5600;border-radius:999px;padding:2px 8px}.vb{display:block;width:100%;height:6px;border-radius:4px;background:var(--line);margin-top:6px;overflow:hidden}.vb i{display:block;height:100%;background:var(--c)}.vt .vs{color:var(--c);font-weight:600}@media print{.noprint,#nav,.band{display:none!important}body{background:#fff}.card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}}.chg{float:right;border:1px solid var(--line);background:var(--card);color:var(--lag);border-radius:999px;padding:6px 12px;font-size:13.5px;font-weight:700;margin-top:6px}
 .voie .ic{flex:0 0 44px;height:44px;font-size:22px;border-radius:12px}
 .voie b{font-size:16.5px}
 .pg{height:6px;border-radius:4px;background:var(--line);margin-top:6px;overflow:hidden}.pg i{display:block;height:100%;background:var(--ok)}
@@ -78,7 +78,7 @@ a{color:var(--lag)}
 <nav id="nav"></nav>
 <script>
 const TRACKS=[];
-TRACKS.push(Object.assign({"id": "hot", "key": "ohipa-hot-v1", "ic": "🏨", "name": "Hôtellerie et tourisme", "sub": "Réception, étages, anglais professionnel, accueil des visiteurs", "col": ["#0f6e78", "#d9eeee", "#4fc0c5", "#1d4750"]},{run:function(){
+TRACKS.push(Object.assign({"id": "hot", "key": "ohipa-hot-v1", "ic": "🏨", "name": "Hôtellerie et tourisme", "sub": "Réception, étages, anglais professionnel, accueil des visiteurs", "col": ["#0f6e78", "#d9eeee", "#4fc0c5", "#1d4750"], "hint": "1er secteur qui recrute au fenua", "ranks": ["Stagiaire", "Débutant", "Employé", "Employé confirmé", "Référent", "Chef d'équipe", "Responsable"]},{run:function(){
 "use strict";
 const J={"DIR": {"n": "Mme Tumata", "r": "Directrice d'hôtel", "c": "#0f6e78"}, "GOU": {"n": "M. Heimana", "r": "Gouvernant général", "c": "#b8402a"}, "REC": {"n": "Mme Vaiana", "r": "Cheffe de réception", "c": "#3d5a99"}, "RH": {"n": "M. Taaroa", "r": "Responsable du personnel", "c": "#2c8a57"}};
 const GRILLE=["Accueil souriant et formule de politesse", "Phrases courtes et claires", "Solution proposée au client", "Anglais simple et poli", "Respect des procédures de l'hôtel", "Relecture"];
@@ -132,14 +132,14 @@ function mix(n,l){ // révision : erreurs d'abord, puis tirage dans les niveaux 
   const pool=[];for(let i=0;i<=l;i++)L[i].q.forEach((_,k)=>pool.push(i+"."+k));
   const w=shuf(S.w.filter(k=>pool.includes(k))),rest=shuf(pool.filter(k=>!w.includes(k)));
   return w.concat(rest).slice(0,n).map(k=>k.split(".").map(Number));}
-function plan(l,d){const Q=a=>a.map(k=>[l,k]),m=SIMMAP[l],sn=m==="dil"?"Dilemmes de l'hôtel":"Atelier : "+AT[+m.slice(2)].t;
+function plan(l,d){const Q=a=>a.map(k=>[l,k]),m=SIMMAP[l],sn=m==="dil"?"Dilemme du métier":"Atelier : "+AT[+m.slice(2)].t;
   return [
-  [{k:"lire",f:[0,1],m:12},{k:"quiz",q:()=>Q(rng(0,6)),m:10},{k:"sim",m:15,n:sn}],
-  [{k:"lire",f:[2,3],m:12},{k:"quiz",q:()=>Q(rng(6,12)),m:10},{k:"cas",c:[0],m:8}],
-  [{k:"oral",o:[0],m:10},{k:"cas",c:[1],m:8},{k:"quiz",q:()=>mix(8,l),m:10,n:"Révision"}],
-  [{k:"oral",o:[1],m:10},{k:"lire",f:[0,1,2,3],m:12,n:"Relecture des fiches"},{k:"quiz",q:()=>mix(10,l),m:12,n:"Révision ciblée"}],
-  [{k:"quiz",q:()=>shuf(Q(rng(0,12))),m:15,n:"Épreuve du niveau"},{k:"ecrit",m:30}]][d];}
-const LBL={sim:["🧩","Simulation"],lire:["📖","Fiches à lire"],quiz:["✅","Quiz"],cas:["🧭","Mise en situation"],oral:["🎙️","Devant le jury"],ecrit:["✍️","Cas écrit"]};
+  [{k:"lire",f:[0],m:4},{k:"quiz",q:()=>Q(rng(0,6)),m:5},{k:"cas",c:[0],m:4}],
+  [{k:"lire",f:[1],m:4},{k:"quiz",q:()=>Q(rng(6,12)),m:5},{k:"sim",m:6,n:sn}],
+  [{k:"lire",f:[2],m:4},{k:"cas",c:[1],m:4},{k:"quiz",q:()=>mix(6,l),m:4,n:"Révision"}],
+  [{k:"lire",f:[3],m:4},{k:"oral",o:[0],m:5},{k:"quiz",q:()=>mix(6,l),m:4,n:"Révision ciblée"}],
+  [{k:"oral",o:[1],m:5},{k:"quiz",q:()=>shuf(Q(rng(0,12))),m:8,n:"Défi du niveau"}]][d];}
+const LBL={sim:["🧩","Simulation"],lire:["📖","Fiches à lire"],quiz:["✅","Quiz"],cas:["🧭","Mise en situation"],oral:["🎙️","Face au recruteur"],ecrit:["✍️","Cas écrit"]};
 const sk=(l,d,i)=>l+"."+d+"."+i;
 const dayDone=(l,d)=>plan(l,d).every((_,i)=>sk(l,d,i) in S.s);
 function curDay(){for(let n=0;n<NS;n++){const l=Math.floor(n/5),d=n%5;if(!dayDone(l,d))return n}return NS}
@@ -171,7 +171,7 @@ function readOut(btn){
   btn.textContent="⏹ Arrêter"}catch(e){}}
 function hdr(title,back){return `<div class="top"><button class="back" id="bk">←</button><b>${title}</b><button class="au" id="au">🔊 Écouter</button></div>`}
 function bindBack(fn){const b=document.getElementById("bk");if(b)b.onclick=()=>{halt();fn()};const a=document.getElementById("au");if(a)a.onclick=()=>readOut(a)}
-function setNav(v){const it=[["home","🏝️","Accueil"],["parcours","🗺️","Parcours"],["fiches","📚","Fiches"],["exam","⏱️","Examens"],["profil","👤","Profil"]];
+function setNav(v){const it=[["home","🏝️","Accueil"],["parcours","🗺️","Parcours"],["fiches","📚","Fiches"],["exam","⏱️","Entretien"],["profil","👤","Profil"]];
   nav.innerHTML=it.map(x=>`<button class="${x[0]===v?"on":""}" data-v="${x[0]}"><span>${x[1]}</span>${x[2]}</button>`).join("");
   nav.querySelectorAll("button").forEach(b=>b.onclick=()=>go(b.dataset.v))}
 function go(v,a,b){halt();AUSRC=null;window.scrollTo(0,0);setNav(v);({home,parcours,fiches,conseil,profil,day,exam})[v](a,b);try{if(v!=="day")location.hash=v}catch(e){}}
@@ -180,19 +180,21 @@ function go(v,a,b){halt();AUSRC=null;window.scrollTo(0,0);setNav(v);({home,parco
 function home(){const n=curDay(),l=Math.floor(n/5),d=n%5,{r,nx}=rank(),pct=Math.round(n/NS*100);
   app.innerHTML=`<div class="band"></div><button class="chg" id="chg">⇄ Voies</button><h1>Hôtellerie et tourisme</h1><p class="mut">Réception, étages, anglais professionnel, accueil des visiteurs</p>
   <div class="card hero">${n<NS?`<small>Séance ${n+1} sur ${NS} · Niveau ${l+1}</small><h2 style="margin:4px 0">${L[l].t}</h2><small>${DAYN[d]} · environ ${plan(l,d).reduce((s,x)=>s+x.m,0)} min</small><button class="btn wh" id="goDay">Commencer la séance</button>`:`<h2 style="margin:4px 0">Parcours terminé 🎉</h2><small>Continue avec les révisions, les ateliers et les entretiens.</small>`}</div>
-  <div class="card"><div class="row"><div class="stat"><b>${streak()}</b><small>jours de suite</small></div><div class="stat"><b>${S.xp}</b><small>points</small></div><div class="stat"><b>${pct}%</b><small>parcours</small></div></div>
-  <div class="bar"><i style="width:${nx?Math.min(100,(S.xp-r[0])/(nx[0]-r[0])*100):100}%"></i></div><small>Grade : <b>${r[1]}</b>${nx?` · prochain : ${nx[1]} à ${nx[0]} points`:""}</small></div>
-  <button class="btn sec" id="rev">Réviser mes erreurs (${S.w.length})</button>
-  <button class="btn sec" id="cs">S'entraîner devant le jury</button>
-  <button class="btn sec" id="exb">Épreuves en conditions réelles</button>
-  <button class="btn sec" id="smb">Ateliers et dilemmes</button>
+  ${S.xp?`<div class="card"><div class="row"><div class="stat"><b>${streak()}</b><small>jours de suite</small></div><div class="stat"><b>${S.xp}</b><small>points</small></div><div class="stat"><b>${pct}%</b><small>parcours</small></div></div>
+  <div class="bar"><i style="width:${nx?Math.min(100,(S.xp-r[0])/(nx[0]-r[0])*100):100}%"></i></div><small>Grade : <b>${r[1]}</b>${nx?` · prochain : ${nx[1]} à ${nx[0]} points`:""}</small></div>`:`<div class="card"><h3 style="margin-top:0">Ia ora na, bienvenue !</h3><p class="mut" style="margin:0">Une séance dure 12 à 15 minutes : une fiche courte, un petit quiz, une mise en situation. Chaque étape te rapporte des points et te fait monter en grade, de ${RANKS[0][1]} à ${RANKS[RANKS.length-1][1]}.</p></div>`}
+  <div class="tiles">
+   <button class="tile" id="rev"${S.w.length?"":" hidden"}><span>🔁</span><b>Réviser</b><small>${S.w.length} erreur${S.w.length>1?"s":""} à revoir</small></button>
+   <button class="tile" id="cs"><span>🎙️</span><b>Recruteur</b><small>Questions d'entretien</small></button>
+   <button class="tile" id="exb"><span>💼</span><b>Simulation d'embauche</b><small>Entretien et test chronométrés</small></button>
+   <button class="tile" id="smb"><span>🧮</span><b>Ateliers</b><small>Calculs et dilemmes du métier</small></button>
+  </div>
   <button class="btn" id="inst" style="display:${INST&&!standalone()?"block":"none"}">📲 Installer l'application</button>
   <div class="card warn"><h3>À savoir</h3><p class="mut">Ce parcours prépare au métier et à l'entretien d'embauche. Il ne remplace ni la formation, ni les habilitations, ni les consignes de l'employeur.</p></div>`;
   const g=document.getElementById("goDay");if(g)g.onclick=()=>go("day",l,d);
   document.getElementById("rev").onclick=()=>{const it=mix(10,L.length-1);quiz(it,"Révision",sc=>{gain("",sc);go("home")},()=>go("home"))};
   document.getElementById("cs").onclick=()=>go("conseil");document.getElementById("exb").onclick=()=>go("exam");document.getElementById("smb").onclick=simHub;document.getElementById("inst").onclick=installApp}
 function parcours(){const cur=curDay();
-  app.innerHTML=`<h1>Parcours</h1><p class="mut">${L.length} niveaux · ${NS} séances d'environ 40 minutes. À 5 séances par semaine : ${L.length} semaines ; tous les jours : environ ${Math.ceil(NS/7)}.</p>`+L.map((x,l)=>`<div class="card"><div class="lvl"><div class="num">${l+1}</div><div style="flex:1"><h3>${x.t}</h3><small>${x.s}</small><div class="days">${DAYN.map((n,d)=>{const i=l*5+d,dn=dayDone(l,d),lk=!S.free&&i>cur;return `<button class="day ${dn?"done":i===cur?"cur":lk?"lock":""}" data-l="${l}" data-d="${d}" ${lk?"disabled":""}>${dn?"✓":n}</button>`}).join("")}</div></div></div></div>`).join("");
+  app.innerHTML=`<h1>Parcours</h1><p class="mut">${L.length} niveaux · ${NS} séances courtes de 12 à 15 minutes. À 5 séances par semaine : ${L.length} semaines ; tous les jours : environ ${Math.ceil(NS/7)}.</p>`+L.map((x,l)=>`<div class="card"><div class="lvl"><div class="num">${l+1}</div><div style="flex:1"><h3>${x.t}</h3><small>${x.s}</small><div class="days">${DAYN.map((n,d)=>{const i=l*5+d,dn=dayDone(l,d),lk=!S.free&&i>cur;return `<button class="day ${dn?"done":i===cur?"cur":lk?"lock":""}" data-l="${l}" data-d="${d}" ${lk?"disabled":""}>${dn?"✓":n}</button>`}).join("")}</div></div></div></div>`).join("");
   app.querySelectorAll(".day").forEach(b=>b.onclick=()=>go("day",+b.dataset.l,+b.dataset.d))}
 function day(l,d){const P=plan(l,d);
   app.innerHTML=hdr(`Niveau ${l+1} · ${DAYN[d]}`)+`<h2>${L[l].t}</h2><p class="mut">Environ ${P.reduce((s,x)=>s+x.m,0)} minutes. Fais les étapes dans l'ordre.</p>`+P.map((p,i)=>{const k=sk(l,d,i),dn=k in S.s;return `<button class="step ${dn?"done":""}" data-i="${i}"><span class="ic">${LBL[p.k][0]}</span><span><b>${p.n||LBL[p.k][1]}</b><br><small>${p.m} min</small></span>${dn?`<span class="sc">${S.s[k]}%</span>`:""}</button>`}).join("")+(dayDone(l,d)?`<div class="card" style="text-align:center"><b>Séance validée ✓</b></div>`:"");
@@ -224,7 +226,7 @@ function timerBox(sec){return `<div class="timer" id="tmr">${fmt(sec)}</div><div
 const fmt=s=>(s>=3600?Math.floor(s/3600)+":"+String(Math.floor(s%3600/60)).padStart(2,"0"):Math.floor(s/60))+":"+String(s%60).padStart(2,"0");
 function bindTimer(sec){let left=sec;const el=document.getElementById("tmr"),b=document.getElementById("tgo");b.onclick=()=>{if(tm){halt();b.textContent="Reprendre";return}b.textContent="Pause";tm=setInterval(()=>{left--;el.textContent=fmt(Math.max(0,left));if(left<=0){halt();el.textContent="Temps écoulé";b.disabled=true}},1000)}}
 function oral(list,done,back){AUSRC=null;let i=0,tot=0;(function show(){const [l,k]=list[i],O=L[l].o[k],j=J[O[0]];halt();window.scrollTo(0,0);
-  app.innerHTML=hdr(`Le jury · ${i+1}/${list.length}`)+`<div class="card"><div class="jur"><div class="av" style="background:${j.c}">${j.n.split(" ").pop()[0]}</div><div><b>${j.n}</b><br><small>${j.r}</small></div></div><p class="q">« ${O[1]} »</p><p class="mut">Prends une minute pour réfléchir, puis réponds <b>à voix haute</b> pendant trois minutes, comme devant le jury.</p>${timerBox(240)}<p class="mut" style="margin-top:12px">Notes (facultatif)</p><textarea id="nt" placeholder="Mots-clés de ta réponse…"></textarea><button class="btn" id="rv">Voir ce que le jury attend</button><div id="fb"></div></div>`;
+  app.innerHTML=hdr(`Le jury · ${i+1}/${list.length}`)+`<div class="card"><div class="jur"><div class="av" style="background:${j.c}">${j.n.split(" ").pop()[0]}</div><div><b>${j.n}</b><br><small>${j.r}</small></div></div><p class="q">« ${O[1]} »</p><p class="mut">Prends une minute pour réfléchir, puis réponds <b>à voix haute</b> pendant trois minutes, comme face au recruteur.</p>${timerBox(240)}<p class="mut" style="margin-top:12px">Notes (facultatif)</p><textarea id="nt" placeholder="Mots-clés de ta réponse…"></textarea><button class="btn" id="rv">Voir ce que le recruteur attend</button><div id="fb"></div></div>`;
   bindBack(back);bindTimer(240);document.getElementById("rv").onclick=e=>{halt();e.target.remove();
     document.getElementById("fb").innerHTML=`<div class="fb"><b>Coche ce que tu as vraiment dit :</b></div>${O[2].map((x,m)=>`<label class="ck"><input type="checkbox" data-m="${m}"><span>${x}</span></label>`).join("")}<button class="btn" id="nx">Valider</button>`;
     document.getElementById("nx").onclick=()=>{tot+=app.querySelectorAll("input:checked").length/O[2].length;i++;i<list.length?show():done(Math.round(tot/list.length*100))}}})()}
@@ -235,7 +237,7 @@ function ecrit(l,done,back,E){AUSRC=null;E=E||L[l].e;window.scrollTo(0,0);
     document.getElementById("nx").onclick=()=>done(Math.round(app.querySelectorAll("input:checked").length/GRILLE.length*100))}}
 function fiches(){app.innerHTML=`<h1>Fiches</h1><p class="mut">Tout le cours, à relire quand tu veux.</p><button class="btn sec" id="rep">📌 Aide-mémoire : les repères à connaître</button>`+L.map((x,l)=>`<div class="card"><h3>${l+1}. ${x.t}</h3>${x.f.map((f,i)=>`<button class="opt" data-l="${l}" data-i="${i}">${f[0]}</button>`).join("")}</div>`).join("");
   app.querySelectorAll(".opt").forEach(b=>b.onclick=()=>lire(+b.dataset.l,[+b.dataset.i],()=>go("fiches"),()=>go("fiches")));document.getElementById("rep").onclick=reperes}
-function conseil(){app.innerHTML=`<h1>Le jury</h1><p class="mut">Ton jury d'entraînement (personnages fictifs). Choisis qui t'interroge, ou laisse le hasard décider.</p>`+Object.keys(J).map(k=>`<button class="step" data-k="${k}"><span class="av" style="background:${J[k].c};flex:0 0 40px;height:40px">${J[k].n.split(" ").pop()[0]}</span><span><b>${J[k].n}</b><br><small>${J[k].r}</small></span></button>`).join("")+`<button class="btn" id="all">Entretien complet : 4 questions</button>`;
+function conseil(){app.innerHTML=`<h1>Les recruteurs</h1><p class="mut">Ton panel de recruteurs d'entraînement (personnages fictifs). Choisis qui t'interroge, ou laisse le hasard décider.</p>`+Object.keys(J).map(k=>`<button class="step" data-k="${k}"><span class="av" style="background:${J[k].c};flex:0 0 40px;height:40px">${J[k].n.split(" ").pop()[0]}</span><span><b>${J[k].n}</b><br><small>${J[k].r}</small></span></button>`).join("")+`<button class="btn" id="all">Entretien complet : 4 questions</button>`;
   const pick=(k,n)=>{const p=[];L.forEach((x,l)=>x.o.forEach((o,i)=>{if(!k||o[0]===k)p.push([l,i])}));return shuf(p).slice(0,n)};
   const run=list=>oral(list,sc=>end("",sc,()=>go("conseil")),()=>go("conseil"));
   app.querySelectorAll(".step").forEach(b=>b.onclick=()=>run(pick(b.dataset.k,2)));
@@ -244,21 +246,21 @@ function conseil(){app.innerHTML=`<h1>Le jury</h1><p class="mut">Ton jury d'entr
 function say(t){if(!TTS)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="fr-FR";u.rate=.97;const v=speechSynthesis.getVoices().find(v=>/^fr/i.test(v.lang));if(v)u.voice=v;speechSynthesis.speak(u)}catch(e){}}
 function count(sec,el,onEnd){let left=sec;el.textContent=fmt(left);if(tm)clearInterval(tm);tm=setInterval(()=>{left--;el.textContent=fmt(Math.max(0,left));if(left<=0){clearInterval(tm);tm=null;onEnd()}},1000)}
 function note20(title,n,back){S.ex.unshift([today(),title,n]);S.ex=S.ex.slice(0,30);end("",Math.round(n*5),back)}
-function exam(){app.innerHTML=`<h1>Conditions réelles</h1><p class="mut">Chrono sans pause, aucune correction avant la fin.</p>
+function exam(){app.innerHTML=`<h1>Simulation d'embauche</h1><p class="mut">Chrono sans pause, aucune correction avant la fin.</p>
   <button class="step" id="e1"><span class="ic">🎙️</span><span><b>Entretien d'embauche en hôtellerie</b><br><small>20 min : 5 min de présentation, puis questions et relances</small></span></button>
-  <button class="step" id="e4"><span class="ic">✅</span><span><b>QCM de connaissances</b><br><small>30 questions en 20 min, correction à la fin</small></span></button>
+  <button class="step" id="e4"><span class="ic">✅</span><span><b>Test de connaissances</b><br><small>30 questions en 20 min, correction à la fin</small></span></button>
   <button class="btn sec" id="e6">Ateliers et dilemmes</button>
-  <button class="btn sec" id="e5">Entraînement libre devant le jury</button>
-  <div class="card"><h3>Mes résultats</h3>${S.ex.length?S.ex.map(x=>`<p style="display:flex;justify-content:space-between"><span>${x[0]} · ${x[1]}</span><b>${x[2]}/20</b></p>`).join(""):`<p class="mut">Aucune épreuve passée pour l'instant.</p>`}</div>
+  <button class="btn sec" id="e5">Entraînement libre avec le recruteur</button>
+  <div class="card"><h3>Mes résultats</h3>${S.ex.length?S.ex.map(x=>`<p style="display:flex;justify-content:space-between"><span>${x[0]} · ${x[1]}</span><b>${x[2]}/20</b></p>`).join(""):`<p class="mut">Aucune simulation passée pour l'instant.</p>`}</div>
   <div class="card warn"><h3>Ce que le jeu ne remplace pas</h3><p class="mut">L'anglais s'apprend en le parlant : entraîne-toi à voix haute chaque jour.</p></div>`;
   const pool=()=>{const p=X.slice();L.forEach(x=>x.o.forEach(o=>p.push(o)));return p};
   document.getElementById("e1").onclick=()=>examOral({t:"Entretien hôtellerie",expo:5,total:20,pool});
   document.getElementById("e4").onclick=examQCM;document.getElementById("e5").onclick=()=>go("conseil");document.getElementById("e6").onclick=simHub}
 function examOral(o){AUSRC=null;const back=()=>go("exam"),asked=[];
-  app.innerHTML=hdr(o.t)+`<div class="card fiche"><h2 style="margin-top:0">Déroulement</h2><ul><li><b>${o.expo} minutes</b> d'exposé : ton parcours et ton projet. À la fin du temps, le jury te coupe.</li><li>Puis des questions jusqu'à <b>${o.total} minutes</b> au total, sans préparation, avec des relances.</li><li>Réponds <b>à voix haute</b>. Tu ne verras les attendus qu'au débriefing.</li><li>Aucune pause. Quitter l'écran annule l'épreuve.</li></ul><label class="ck" style="border:0"><input type="checkbox" id="vx" ${TTS?"checked":"disabled"}><span>Le jury pose ses questions à voix haute${TTS?"":" (indisponible sur cet appareil)"}</span></label><button class="btn" id="st">Entrer dans la salle</button></div>`;
+  app.innerHTML=hdr(o.t)+`<div class="card fiche"><h2 style="margin-top:0">Déroulement</h2><ul><li><b>${o.expo} minutes</b> d'exposé : ton parcours et ton projet. À la fin du temps, le recruteur te coupe.</li><li>Puis des questions jusqu'à <b>${o.total} minutes</b> au total, sans préparation, avec des relances.</li><li>Réponds <b>à voix haute</b>. Tu ne verras les attendus qu'au débriefing.</li><li>Aucune pause. Quitter l'écran annule l'épreuve.</li></ul><label class="ck" style="border:0"><input type="checkbox" id="vx" ${TTS?"checked":"disabled"}><span>Le recruteur pose ses questions à voix haute${TTS?"":" (indisponible sur cet appareil)"}</span></label><button class="btn" id="st">Entrer dans la salle</button></div>`;
   bindBack(back);document.getElementById("st").onclick=()=>p1(document.getElementById("vx").checked);
   function p1(voice){const line=`Bonjour. Installez-vous. Vous avez ${o.expo} minutes pour vous présenter, nous vous écoutons.`,t0=Date.now();window.scrollTo(0,0);
-    app.innerHTML=`<div class="card"><span class="tag">Exposé</span><p class="q">« ${line} »</p><div class="timer" id="tmr"></div><p class="mut">Regarde l'écran comme tu regarderais le jury. Ne lis pas tes notes.</p><button class="btn" id="nx">J'ai terminé mon exposé</button></div>`;
+    app.innerHTML=`<div class="card"><span class="tag">Exposé</span><p class="q">« ${line} »</p><div class="timer" id="tmr"></div><p class="mut">Regarde l'écran comme tu regarderais le recruteur. Ne lis pas tes notes.</p><button class="btn" id="nx">J'ai terminé mon exposé</button></div>`;
     if(voice)say(line);const nx=cut=>{clearInterval(tm);tm=null;p2(voice,cut,Math.round((Date.now()-t0)/1000))};
     count(o.expo*60,document.getElementById("tmr"),()=>nx(true));document.getElementById("nx").onclick=()=>nx(false)}
   function p2(voice,cut,used){const qs=shuf(o.pool()).slice(0,16);let i=-1,rel=false,over=false;window.scrollTo(0,0);
@@ -268,8 +270,8 @@ function examOral(o){AUSRC=null;const back=()=>go("exam"),asked=[];
     const put=(q,txt,pre)=>{const j=J[q[0]];document.getElementById("qz").innerHTML=`<div class="jur"><div class="av" style="background:${j.c}">${j.n.split(" ").pop()[0]}</div><div><b>${j.n}</b><br><small>${j.r}</small></div></div><p class="q">« ${pre||""}${txt} »</p>`;if(voice)say((pre||"")+txt)};
     const nxt=()=>{if(!rel&&i>=0&&Math.random()<.35){rel=true;put(qs[i],RELANCES[Math.floor(Math.random()*RELANCES.length)])}else{rel=false;i++;if(i>=qs.length)return fin();asked.push(qs[i]);put(qs[i],qs[i][1],i===0&&cut?"Je vous interromps, le temps de l'exposé est écoulé. ":"")}};
     document.getElementById("nx").onclick=nxt;nxt()}
-  function debrief(cut,used){const tgt=o.expo*60,msg=cut?"interrompu par le jury : exposé trop long ou mal minuté":used<tgt*.6?"nettement trop court : tu laisses du temps aux questions difficiles":"durée correcte";window.scrollTo(0,0);
-    app.innerHTML=hdr("Débriefing")+`<div class="card"><p><b>Exposé : ${fmt(used)}</b> sur ${o.expo}:00, ${msg}.</p><p><b>${asked.length} questions</b> traitées. Ouvre chacune et compare avec ce que tu as réellement dit.</p></div>`+asked.map(q=>`<details class="card"><summary><b>${J[q[0]].n} :</b> ${q[1]}</summary><ul>${q[2].map(k=>`<li>${k}</li>`).join("")}</ul></details>`).join("")+`<div class="card"><h3>Grille du jury</h3><p class="mut">Note-toi comme un jury le ferait : 0 = absent, 2 = moyen, 4 = excellent.</p>${CRIT.map(c=>`<label class="ck"><span style="flex:1">${c}</span><select>${[0,1,2,3,4].map(n=>`<option ${n===2?"selected":""}>${n}</option>`).join("")}</select></label>`).join("")}<button class="btn" id="ok">Calculer ma note</button></div>`;
+  function debrief(cut,used){const tgt=o.expo*60,msg=cut?"interrompu par le recruteur : exposé trop long ou mal minuté":used<tgt*.6?"nettement trop court : tu laisses du temps aux questions difficiles":"durée correcte";window.scrollTo(0,0);
+    app.innerHTML=hdr("Débriefing")+`<div class="card"><p><b>Exposé : ${fmt(used)}</b> sur ${o.expo}:00, ${msg}.</p><p><b>${asked.length} questions</b> traitées. Ouvre chacune et compare avec ce que tu as réellement dit.</p></div>`+asked.map(q=>`<details class="card"><summary><b>${J[q[0]].n} :</b> ${q[1]}</summary><ul>${q[2].map(k=>`<li>${k}</li>`).join("")}</ul></details>`).join("")+`<div class="card"><h3>Grille du recruteur</h3><p class="mut">Note-toi comme un recruteur le ferait : 0 = absent, 2 = moyen, 4 = excellent.</p>${CRIT.map(c=>`<label class="ck"><span style="flex:1">${c}</span><select>${[0,1,2,3,4].map(n=>`<option ${n===2?"selected":""}>${n}</option>`).join("")}</select></label>`).join("")}<button class="btn" id="ok">Calculer ma note</button></div>`;
     bindBack(back);document.getElementById("ok").onclick=()=>{let n=0;app.querySelectorAll("select").forEach(x=>n+=+x.value);note20(o.t,n,back)}}}
 function examQCM(){AUSRC=null;const back=()=>go("exam"),pool=[];L.forEach((x,l)=>x.q.forEach((_,k)=>pool.push([l,k])));const items=shuf(pool).slice(0,30),res=[];let i=0,over=false;
   app.innerHTML=hdr("QCM · 30 questions")+`<div class="timer" id="tmr"></div><div id="qz"></div>`;bindBack(back);
@@ -317,7 +319,7 @@ function simHub(){const back=()=>go("exam");
   document.getElementById("dl").onclick=()=>dilem(sc=>end("dil",sc,simHub),simHub)}
 
 /* ===================== INSTALLATION ET MISE À JOUR ===================== */
-const APP_V="2026.11.16.2";let INST=null,SWR=null;
+const APP_V="2026.11.17.1";let INST=null,SWR=null;
 const standalone=()=>{try{return matchMedia("(display-mode: standalone)").matches||navigator.standalone===true}catch(e){return false}};
 try{window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();INST=e;const b=document.getElementById("inst");if(b)b.style.display="block"})}catch(e){}
 try{if("serviceWorker" in navigator&&location.protocol==="https:"&&!/claude\.ai|claudeusercontent/.test(location.host))navigator.serviceWorker.register("sw.js").then(r=>{SWR=r;r.addEventListener("updatefound",()=>{const w=r.installing;if(w)w.addEventListener("statechange",()=>{if(w.state==="installed"&&navigator.serviceWorker.controller)toast("Nouvelle version disponible : Profil → Mettre à jour.")})})}).catch(()=>{})}catch(e){}
@@ -363,7 +365,7 @@ window.addEventListener("hashchange",()=>{const h=location.hash.slice(1);if(["ho
 
 window.__CF={L:L,AT:typeof AT!=="undefined"?AT:null,open:(l,i)=>lire(l,[i],()=>go("fiches"),()=>go("fiches"))};
 }}));
-TRACKS.push(Object.assign({"id": "res", "key": "ohipa-res-v1", "ic": "🍽️", "name": "Restauration", "sub": "Service en salle, bar, cuisine, hygiène alimentaire", "col": ["#b8402a", "#f9e4de", "#f39a85", "#4c2a24"]},{run:function(){
+TRACKS.push(Object.assign({"id": "res", "key": "ohipa-res-v1", "ic": "🍽️", "name": "Restauration", "sub": "Service en salle, bar, cuisine, hygiène alimentaire", "col": ["#b8402a", "#f9e4de", "#f39a85", "#4c2a24"], "hint": "Cuisiniers et serveurs très demandés", "ranks": ["Commis", "Débutant", "Équipier", "Serveur confirmé", "Chef de rang", "Chef de partie", "Responsable"]},{run:function(){
 "use strict";
 const J={"CHF": {"n": "M. Teva", "r": "Chef de cuisine", "c": "#b8402a"}, "MAI": {"n": "Mme Hinano", "r": "Maître d'hôtel", "c": "#0f6e78"}, "HYG": {"n": "Dr Raiarii", "r": "Inspecteur d'hygiène", "c": "#2c8a57"}, "PAT": {"n": "Mme Moea", "r": "Gérante de snack", "c": "#7a4fa3"}};
 const GRILLE=["Règles d'hygiène citées", "Ordre logique", "Sécurité du client (allergies)", "Vocabulaire du métier", "Exemple concret", "Relecture"];
@@ -417,14 +419,14 @@ function mix(n,l){ // révision : erreurs d'abord, puis tirage dans les niveaux 
   const pool=[];for(let i=0;i<=l;i++)L[i].q.forEach((_,k)=>pool.push(i+"."+k));
   const w=shuf(S.w.filter(k=>pool.includes(k))),rest=shuf(pool.filter(k=>!w.includes(k)));
   return w.concat(rest).slice(0,n).map(k=>k.split(".").map(Number));}
-function plan(l,d){const Q=a=>a.map(k=>[l,k]),m=SIMMAP[l],sn=m==="dil"?"Dilemmes du restaurant":"Atelier : "+AT[+m.slice(2)].t;
+function plan(l,d){const Q=a=>a.map(k=>[l,k]),m=SIMMAP[l],sn=m==="dil"?"Dilemme du métier":"Atelier : "+AT[+m.slice(2)].t;
   return [
-  [{k:"lire",f:[0,1],m:12},{k:"quiz",q:()=>Q(rng(0,6)),m:10},{k:"sim",m:15,n:sn}],
-  [{k:"lire",f:[2,3],m:12},{k:"quiz",q:()=>Q(rng(6,12)),m:10},{k:"cas",c:[0],m:8}],
-  [{k:"oral",o:[0],m:10},{k:"cas",c:[1],m:8},{k:"quiz",q:()=>mix(8,l),m:10,n:"Révision"}],
-  [{k:"oral",o:[1],m:10},{k:"lire",f:[0,1,2,3],m:12,n:"Relecture des fiches"},{k:"quiz",q:()=>mix(10,l),m:12,n:"Révision ciblée"}],
-  [{k:"quiz",q:()=>shuf(Q(rng(0,12))),m:15,n:"Épreuve du niveau"},{k:"ecrit",m:30}]][d];}
-const LBL={sim:["🧩","Simulation"],lire:["📖","Fiches à lire"],quiz:["✅","Quiz"],cas:["🧭","Mise en situation"],oral:["🎙️","Devant le jury"],ecrit:["✍️","Cas écrit"]};
+  [{k:"lire",f:[0],m:4},{k:"quiz",q:()=>Q(rng(0,6)),m:5},{k:"cas",c:[0],m:4}],
+  [{k:"lire",f:[1],m:4},{k:"quiz",q:()=>Q(rng(6,12)),m:5},{k:"sim",m:6,n:sn}],
+  [{k:"lire",f:[2],m:4},{k:"cas",c:[1],m:4},{k:"quiz",q:()=>mix(6,l),m:4,n:"Révision"}],
+  [{k:"lire",f:[3],m:4},{k:"oral",o:[0],m:5},{k:"quiz",q:()=>mix(6,l),m:4,n:"Révision ciblée"}],
+  [{k:"oral",o:[1],m:5},{k:"quiz",q:()=>shuf(Q(rng(0,12))),m:8,n:"Défi du niveau"}]][d];}
+const LBL={sim:["🧩","Simulation"],lire:["📖","Fiches à lire"],quiz:["✅","Quiz"],cas:["🧭","Mise en situation"],oral:["🎙️","Face au recruteur"],ecrit:["✍️","Cas écrit"]};
 const sk=(l,d,i)=>l+"."+d+"."+i;
 const dayDone=(l,d)=>plan(l,d).every((_,i)=>sk(l,d,i) in S.s);
 function curDay(){for(let n=0;n<NS;n++){const l=Math.floor(n/5),d=n%5;if(!dayDone(l,d))return n}return NS}
@@ -456,7 +458,7 @@ function readOut(btn){
   btn.textContent="⏹ Arrêter"}catch(e){}}
 function hdr(title,back){return `<div class="top"><button class="back" id="bk">←</button><b>${title}</b><button class="au" id="au">🔊 Écouter</button></div>`}
 function bindBack(fn){const b=document.getElementById("bk");if(b)b.onclick=()=>{halt();fn()};const a=document.getElementById("au");if(a)a.onclick=()=>readOut(a)}
-function setNav(v){const it=[["home","🏝️","Accueil"],["parcours","🗺️","Parcours"],["fiches","📚","Fiches"],["exam","⏱️","Examens"],["profil","👤","Profil"]];
+function setNav(v){const it=[["home","🏝️","Accueil"],["parcours","🗺️","Parcours"],["fiches","📚","Fiches"],["exam","⏱️","Entretien"],["profil","👤","Profil"]];
   nav.innerHTML=it.map(x=>`<button class="${x[0]===v?"on":""}" data-v="${x[0]}"><span>${x[1]}</span>${x[2]}</button>`).join("");
   nav.querySelectorAll("button").forEach(b=>b.onclick=()=>go(b.dataset.v))}
 function go(v,a,b){halt();AUSRC=null;window.scrollTo(0,0);setNav(v);({home,parcours,fiches,conseil,profil,day,exam})[v](a,b);try{if(v!=="day")location.hash=v}catch(e){}}
@@ -465,19 +467,21 @@ function go(v,a,b){halt();AUSRC=null;window.scrollTo(0,0);setNav(v);({home,parco
 function home(){const n=curDay(),l=Math.floor(n/5),d=n%5,{r,nx}=rank(),pct=Math.round(n/NS*100);
   app.innerHTML=`<div class="band"></div><button class="chg" id="chg">⇄ Voies</button><h1>Restauration</h1><p class="mut">Service en salle, bar, cuisine, hygiène alimentaire</p>
   <div class="card hero">${n<NS?`<small>Séance ${n+1} sur ${NS} · Niveau ${l+1}</small><h2 style="margin:4px 0">${L[l].t}</h2><small>${DAYN[d]} · environ ${plan(l,d).reduce((s,x)=>s+x.m,0)} min</small><button class="btn wh" id="goDay">Commencer la séance</button>`:`<h2 style="margin:4px 0">Parcours terminé 🎉</h2><small>Continue avec les révisions, les ateliers et les entretiens.</small>`}</div>
-  <div class="card"><div class="row"><div class="stat"><b>${streak()}</b><small>jours de suite</small></div><div class="stat"><b>${S.xp}</b><small>points</small></div><div class="stat"><b>${pct}%</b><small>parcours</small></div></div>
-  <div class="bar"><i style="width:${nx?Math.min(100,(S.xp-r[0])/(nx[0]-r[0])*100):100}%"></i></div><small>Grade : <b>${r[1]}</b>${nx?` · prochain : ${nx[1]} à ${nx[0]} points`:""}</small></div>
-  <button class="btn sec" id="rev">Réviser mes erreurs (${S.w.length})</button>
-  <button class="btn sec" id="cs">S'entraîner devant le jury</button>
-  <button class="btn sec" id="exb">Épreuves en conditions réelles</button>
-  <button class="btn sec" id="smb">Ateliers et dilemmes</button>
+  ${S.xp?`<div class="card"><div class="row"><div class="stat"><b>${streak()}</b><small>jours de suite</small></div><div class="stat"><b>${S.xp}</b><small>points</small></div><div class="stat"><b>${pct}%</b><small>parcours</small></div></div>
+  <div class="bar"><i style="width:${nx?Math.min(100,(S.xp-r[0])/(nx[0]-r[0])*100):100}%"></i></div><small>Grade : <b>${r[1]}</b>${nx?` · prochain : ${nx[1]} à ${nx[0]} points`:""}</small></div>`:`<div class="card"><h3 style="margin-top:0">Ia ora na, bienvenue !</h3><p class="mut" style="margin:0">Une séance dure 12 à 15 minutes : une fiche courte, un petit quiz, une mise en situation. Chaque étape te rapporte des points et te fait monter en grade, de ${RANKS[0][1]} à ${RANKS[RANKS.length-1][1]}.</p></div>`}
+  <div class="tiles">
+   <button class="tile" id="rev"${S.w.length?"":" hidden"}><span>🔁</span><b>Réviser</b><small>${S.w.length} erreur${S.w.length>1?"s":""} à revoir</small></button>
+   <button class="tile" id="cs"><span>🎙️</span><b>Recruteur</b><small>Questions d'entretien</small></button>
+   <button class="tile" id="exb"><span>💼</span><b>Simulation d'embauche</b><small>Entretien et test chronométrés</small></button>
+   <button class="tile" id="smb"><span>🧮</span><b>Ateliers</b><small>Calculs et dilemmes du métier</small></button>
+  </div>
   <button class="btn" id="inst" style="display:${INST&&!standalone()?"block":"none"}">📲 Installer l'application</button>
   <div class="card warn"><h3>À savoir</h3><p class="mut">Ce parcours prépare au métier et à l'entretien d'embauche. Il ne remplace ni la formation, ni les habilitations, ni les consignes de l'employeur.</p></div>`;
   const g=document.getElementById("goDay");if(g)g.onclick=()=>go("day",l,d);
   document.getElementById("rev").onclick=()=>{const it=mix(10,L.length-1);quiz(it,"Révision",sc=>{gain("",sc);go("home")},()=>go("home"))};
   document.getElementById("cs").onclick=()=>go("conseil");document.getElementById("exb").onclick=()=>go("exam");document.getElementById("smb").onclick=simHub;document.getElementById("inst").onclick=installApp}
 function parcours(){const cur=curDay();
-  app.innerHTML=`<h1>Parcours</h1><p class="mut">${L.length} niveaux · ${NS} séances d'environ 40 minutes. À 5 séances par semaine : ${L.length} semaines ; tous les jours : environ ${Math.ceil(NS/7)}.</p>`+L.map((x,l)=>`<div class="card"><div class="lvl"><div class="num">${l+1}</div><div style="flex:1"><h3>${x.t}</h3><small>${x.s}</small><div class="days">${DAYN.map((n,d)=>{const i=l*5+d,dn=dayDone(l,d),lk=!S.free&&i>cur;return `<button class="day ${dn?"done":i===cur?"cur":lk?"lock":""}" data-l="${l}" data-d="${d}" ${lk?"disabled":""}>${dn?"✓":n}</button>`}).join("")}</div></div></div></div>`).join("");
+  app.innerHTML=`<h1>Parcours</h1><p class="mut">${L.length} niveaux · ${NS} séances courtes de 12 à 15 minutes. À 5 séances par semaine : ${L.length} semaines ; tous les jours : environ ${Math.ceil(NS/7)}.</p>`+L.map((x,l)=>`<div class="card"><div class="lvl"><div class="num">${l+1}</div><div style="flex:1"><h3>${x.t}</h3><small>${x.s}</small><div class="days">${DAYN.map((n,d)=>{const i=l*5+d,dn=dayDone(l,d),lk=!S.free&&i>cur;return `<button class="day ${dn?"done":i===cur?"cur":lk?"lock":""}" data-l="${l}" data-d="${d}" ${lk?"disabled":""}>${dn?"✓":n}</button>`}).join("")}</div></div></div></div>`).join("");
   app.querySelectorAll(".day").forEach(b=>b.onclick=()=>go("day",+b.dataset.l,+b.dataset.d))}
 function day(l,d){const P=plan(l,d);
   app.innerHTML=hdr(`Niveau ${l+1} · ${DAYN[d]}`)+`<h2>${L[l].t}</h2><p class="mut">Environ ${P.reduce((s,x)=>s+x.m,0)} minutes. Fais les étapes dans l'ordre.</p>`+P.map((p,i)=>{const k=sk(l,d,i),dn=k in S.s;return `<button class="step ${dn?"done":""}" data-i="${i}"><span class="ic">${LBL[p.k][0]}</span><span><b>${p.n||LBL[p.k][1]}</b><br><small>${p.m} min</small></span>${dn?`<span class="sc">${S.s[k]}%</span>`:""}</button>`}).join("")+(dayDone(l,d)?`<div class="card" style="text-align:center"><b>Séance validée ✓</b></div>`:"");
@@ -509,7 +513,7 @@ function timerBox(sec){return `<div class="timer" id="tmr">${fmt(sec)}</div><div
 const fmt=s=>(s>=3600?Math.floor(s/3600)+":"+String(Math.floor(s%3600/60)).padStart(2,"0"):Math.floor(s/60))+":"+String(s%60).padStart(2,"0");
 function bindTimer(sec){let left=sec;const el=document.getElementById("tmr"),b=document.getElementById("tgo");b.onclick=()=>{if(tm){halt();b.textContent="Reprendre";return}b.textContent="Pause";tm=setInterval(()=>{left--;el.textContent=fmt(Math.max(0,left));if(left<=0){halt();el.textContent="Temps écoulé";b.disabled=true}},1000)}}
 function oral(list,done,back){AUSRC=null;let i=0,tot=0;(function show(){const [l,k]=list[i],O=L[l].o[k],j=J[O[0]];halt();window.scrollTo(0,0);
-  app.innerHTML=hdr(`Le jury · ${i+1}/${list.length}`)+`<div class="card"><div class="jur"><div class="av" style="background:${j.c}">${j.n.split(" ").pop()[0]}</div><div><b>${j.n}</b><br><small>${j.r}</small></div></div><p class="q">« ${O[1]} »</p><p class="mut">Prends une minute pour réfléchir, puis réponds <b>à voix haute</b> pendant trois minutes, comme devant le jury.</p>${timerBox(240)}<p class="mut" style="margin-top:12px">Notes (facultatif)</p><textarea id="nt" placeholder="Mots-clés de ta réponse…"></textarea><button class="btn" id="rv">Voir ce que le jury attend</button><div id="fb"></div></div>`;
+  app.innerHTML=hdr(`Le jury · ${i+1}/${list.length}`)+`<div class="card"><div class="jur"><div class="av" style="background:${j.c}">${j.n.split(" ").pop()[0]}</div><div><b>${j.n}</b><br><small>${j.r}</small></div></div><p class="q">« ${O[1]} »</p><p class="mut">Prends une minute pour réfléchir, puis réponds <b>à voix haute</b> pendant trois minutes, comme face au recruteur.</p>${timerBox(240)}<p class="mut" style="margin-top:12px">Notes (facultatif)</p><textarea id="nt" placeholder="Mots-clés de ta réponse…"></textarea><button class="btn" id="rv">Voir ce que le recruteur attend</button><div id="fb"></div></div>`;
   bindBack(back);bindTimer(240);document.getElementById("rv").onclick=e=>{halt();e.target.remove();
     document.getElementById("fb").innerHTML=`<div class="fb"><b>Coche ce que tu as vraiment dit :</b></div>${O[2].map((x,m)=>`<label class="ck"><input type="checkbox" data-m="${m}"><span>${x}</span></label>`).join("")}<button class="btn" id="nx">Valider</button>`;
     document.getElementById("nx").onclick=()=>{tot+=app.querySelectorAll("input:checked").length/O[2].length;i++;i<list.length?show():done(Math.round(tot/list.length*100))}}})()}
@@ -520,7 +524,7 @@ function ecrit(l,done,back,E){AUSRC=null;E=E||L[l].e;window.scrollTo(0,0);
     document.getElementById("nx").onclick=()=>done(Math.round(app.querySelectorAll("input:checked").length/GRILLE.length*100))}}
 function fiches(){app.innerHTML=`<h1>Fiches</h1><p class="mut">Tout le cours, à relire quand tu veux.</p><button class="btn sec" id="rep">📌 Aide-mémoire : les repères à connaître</button>`+L.map((x,l)=>`<div class="card"><h3>${l+1}. ${x.t}</h3>${x.f.map((f,i)=>`<button class="opt" data-l="${l}" data-i="${i}">${f[0]}</button>`).join("")}</div>`).join("");
   app.querySelectorAll(".opt").forEach(b=>b.onclick=()=>lire(+b.dataset.l,[+b.dataset.i],()=>go("fiches"),()=>go("fiches")));document.getElementById("rep").onclick=reperes}
-function conseil(){app.innerHTML=`<h1>Le jury</h1><p class="mut">Ton jury d'entraînement (personnages fictifs). Choisis qui t'interroge, ou laisse le hasard décider.</p>`+Object.keys(J).map(k=>`<button class="step" data-k="${k}"><span class="av" style="background:${J[k].c};flex:0 0 40px;height:40px">${J[k].n.split(" ").pop()[0]}</span><span><b>${J[k].n}</b><br><small>${J[k].r}</small></span></button>`).join("")+`<button class="btn" id="all">Entretien complet : 4 questions</button>`;
+function conseil(){app.innerHTML=`<h1>Les recruteurs</h1><p class="mut">Ton panel de recruteurs d'entraînement (personnages fictifs). Choisis qui t'interroge, ou laisse le hasard décider.</p>`+Object.keys(J).map(k=>`<button class="step" data-k="${k}"><span class="av" style="background:${J[k].c};flex:0 0 40px;height:40px">${J[k].n.split(" ").pop()[0]}</span><span><b>${J[k].n}</b><br><small>${J[k].r}</small></span></button>`).join("")+`<button class="btn" id="all">Entretien complet : 4 questions</button>`;
   const pick=(k,n)=>{const p=[];L.forEach((x,l)=>x.o.forEach((o,i)=>{if(!k||o[0]===k)p.push([l,i])}));return shuf(p).slice(0,n)};
   const run=list=>oral(list,sc=>end("",sc,()=>go("conseil")),()=>go("conseil"));
   app.querySelectorAll(".step").forEach(b=>b.onclick=()=>run(pick(b.dataset.k,2)));
@@ -529,21 +533,21 @@ function conseil(){app.innerHTML=`<h1>Le jury</h1><p class="mut">Ton jury d'entr
 function say(t){if(!TTS)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="fr-FR";u.rate=.97;const v=speechSynthesis.getVoices().find(v=>/^fr/i.test(v.lang));if(v)u.voice=v;speechSynthesis.speak(u)}catch(e){}}
 function count(sec,el,onEnd){let left=sec;el.textContent=fmt(left);if(tm)clearInterval(tm);tm=setInterval(()=>{left--;el.textContent=fmt(Math.max(0,left));if(left<=0){clearInterval(tm);tm=null;onEnd()}},1000)}
 function note20(title,n,back){S.ex.unshift([today(),title,n]);S.ex=S.ex.slice(0,30);end("",Math.round(n*5),back)}
-function exam(){app.innerHTML=`<h1>Conditions réelles</h1><p class="mut">Chrono sans pause, aucune correction avant la fin.</p>
+function exam(){app.innerHTML=`<h1>Simulation d'embauche</h1><p class="mut">Chrono sans pause, aucune correction avant la fin.</p>
   <button class="step" id="e1"><span class="ic">🎙️</span><span><b>Entretien d'embauche en restauration</b><br><small>20 min : 5 min de présentation, puis questions et relances</small></span></button>
-  <button class="step" id="e4"><span class="ic">✅</span><span><b>QCM de connaissances</b><br><small>30 questions en 20 min, correction à la fin</small></span></button>
+  <button class="step" id="e4"><span class="ic">✅</span><span><b>Test de connaissances</b><br><small>30 questions en 20 min, correction à la fin</small></span></button>
   <button class="btn sec" id="e6">Ateliers et dilemmes</button>
-  <button class="btn sec" id="e5">Entraînement libre devant le jury</button>
-  <div class="card"><h3>Mes résultats</h3>${S.ex.length?S.ex.map(x=>`<p style="display:flex;justify-content:space-between"><span>${x[0]} · ${x[1]}</span><b>${x[2]}/20</b></p>`).join(""):`<p class="mut">Aucune épreuve passée pour l'instant.</p>`}</div>
+  <button class="btn sec" id="e5">Entraînement libre avec le recruteur</button>
+  <div class="card"><h3>Mes résultats</h3>${S.ex.length?S.ex.map(x=>`<p style="display:flex;justify-content:space-between"><span>${x[0]} · ${x[1]}</span><b>${x[2]}/20</b></p>`).join(""):`<p class="mut">Aucune simulation passée pour l'instant.</p>`}</div>
   <div class="card warn"><h3>Ce que le jeu ne remplace pas</h3><p class="mut">L'hygiène et les gestes se pratiquent : demande une formation hygiène alimentaire.</p></div>`;
   const pool=()=>{const p=X.slice();L.forEach(x=>x.o.forEach(o=>p.push(o)));return p};
   document.getElementById("e1").onclick=()=>examOral({t:"Entretien restauration",expo:5,total:20,pool});
   document.getElementById("e4").onclick=examQCM;document.getElementById("e5").onclick=()=>go("conseil");document.getElementById("e6").onclick=simHub}
 function examOral(o){AUSRC=null;const back=()=>go("exam"),asked=[];
-  app.innerHTML=hdr(o.t)+`<div class="card fiche"><h2 style="margin-top:0">Déroulement</h2><ul><li><b>${o.expo} minutes</b> d'exposé : ton parcours et ton projet. À la fin du temps, le jury te coupe.</li><li>Puis des questions jusqu'à <b>${o.total} minutes</b> au total, sans préparation, avec des relances.</li><li>Réponds <b>à voix haute</b>. Tu ne verras les attendus qu'au débriefing.</li><li>Aucune pause. Quitter l'écran annule l'épreuve.</li></ul><label class="ck" style="border:0"><input type="checkbox" id="vx" ${TTS?"checked":"disabled"}><span>Le jury pose ses questions à voix haute${TTS?"":" (indisponible sur cet appareil)"}</span></label><button class="btn" id="st">Entrer dans la salle</button></div>`;
+  app.innerHTML=hdr(o.t)+`<div class="card fiche"><h2 style="margin-top:0">Déroulement</h2><ul><li><b>${o.expo} minutes</b> d'exposé : ton parcours et ton projet. À la fin du temps, le recruteur te coupe.</li><li>Puis des questions jusqu'à <b>${o.total} minutes</b> au total, sans préparation, avec des relances.</li><li>Réponds <b>à voix haute</b>. Tu ne verras les attendus qu'au débriefing.</li><li>Aucune pause. Quitter l'écran annule l'épreuve.</li></ul><label class="ck" style="border:0"><input type="checkbox" id="vx" ${TTS?"checked":"disabled"}><span>Le recruteur pose ses questions à voix haute${TTS?"":" (indisponible sur cet appareil)"}</span></label><button class="btn" id="st">Entrer dans la salle</button></div>`;
   bindBack(back);document.getElementById("st").onclick=()=>p1(document.getElementById("vx").checked);
   function p1(voice){const line=`Bonjour. Installez-vous. Vous avez ${o.expo} minutes pour vous présenter, nous vous écoutons.`,t0=Date.now();window.scrollTo(0,0);
-    app.innerHTML=`<div class="card"><span class="tag">Exposé</span><p class="q">« ${line} »</p><div class="timer" id="tmr"></div><p class="mut">Regarde l'écran comme tu regarderais le jury. Ne lis pas tes notes.</p><button class="btn" id="nx">J'ai terminé mon exposé</button></div>`;
+    app.innerHTML=`<div class="card"><span class="tag">Exposé</span><p class="q">« ${line} »</p><div class="timer" id="tmr"></div><p class="mut">Regarde l'écran comme tu regarderais le recruteur. Ne lis pas tes notes.</p><button class="btn" id="nx">J'ai terminé mon exposé</button></div>`;
     if(voice)say(line);const nx=cut=>{clearInterval(tm);tm=null;p2(voice,cut,Math.round((Date.now()-t0)/1000))};
     count(o.expo*60,document.getElementById("tmr"),()=>nx(true));document.getElementById("nx").onclick=()=>nx(false)}
   function p2(voice,cut,used){const qs=shuf(o.pool()).slice(0,16);let i=-1,rel=false,over=false;window.scrollTo(0,0);
@@ -553,8 +557,8 @@ function examOral(o){AUSRC=null;const back=()=>go("exam"),asked=[];
     const put=(q,txt,pre)=>{const j=J[q[0]];document.getElementById("qz").innerHTML=`<div class="jur"><div class="av" style="background:${j.c}">${j.n.split(" ").pop()[0]}</div><div><b>${j.n}</b><br><small>${j.r}</small></div></div><p class="q">« ${pre||""}${txt} »</p>`;if(voice)say((pre||"")+txt)};
     const nxt=()=>{if(!rel&&i>=0&&Math.random()<.35){rel=true;put(qs[i],RELANCES[Math.floor(Math.random()*RELANCES.length)])}else{rel=false;i++;if(i>=qs.length)return fin();asked.push(qs[i]);put(qs[i],qs[i][1],i===0&&cut?"Je vous interromps, le temps de l'exposé est écoulé. ":"")}};
     document.getElementById("nx").onclick=nxt;nxt()}
-  function debrief(cut,used){const tgt=o.expo*60,msg=cut?"interrompu par le jury : exposé trop long ou mal minuté":used<tgt*.6?"nettement trop court : tu laisses du temps aux questions difficiles":"durée correcte";window.scrollTo(0,0);
-    app.innerHTML=hdr("Débriefing")+`<div class="card"><p><b>Exposé : ${fmt(used)}</b> sur ${o.expo}:00, ${msg}.</p><p><b>${asked.length} questions</b> traitées. Ouvre chacune et compare avec ce que tu as réellement dit.</p></div>`+asked.map(q=>`<details class="card"><summary><b>${J[q[0]].n} :</b> ${q[1]}</summary><ul>${q[2].map(k=>`<li>${k}</li>`).join("")}</ul></details>`).join("")+`<div class="card"><h3>Grille du jury</h3><p class="mut">Note-toi comme un jury le ferait : 0 = absent, 2 = moyen, 4 = excellent.</p>${CRIT.map(c=>`<label class="ck"><span style="flex:1">${c}</span><select>${[0,1,2,3,4].map(n=>`<option ${n===2?"selected":""}>${n}</option>`).join("")}</select></label>`).join("")}<button class="btn" id="ok">Calculer ma note</button></div>`;
+  function debrief(cut,used){const tgt=o.expo*60,msg=cut?"interrompu par le recruteur : exposé trop long ou mal minuté":used<tgt*.6?"nettement trop court : tu laisses du temps aux questions difficiles":"durée correcte";window.scrollTo(0,0);
+    app.innerHTML=hdr("Débriefing")+`<div class="card"><p><b>Exposé : ${fmt(used)}</b> sur ${o.expo}:00, ${msg}.</p><p><b>${asked.length} questions</b> traitées. Ouvre chacune et compare avec ce que tu as réellement dit.</p></div>`+asked.map(q=>`<details class="card"><summary><b>${J[q[0]].n} :</b> ${q[1]}</summary><ul>${q[2].map(k=>`<li>${k}</li>`).join("")}</ul></details>`).join("")+`<div class="card"><h3>Grille du recruteur</h3><p class="mut">Note-toi comme un recruteur le ferait : 0 = absent, 2 = moyen, 4 = excellent.</p>${CRIT.map(c=>`<label class="ck"><span style="flex:1">${c}</span><select>${[0,1,2,3,4].map(n=>`<option ${n===2?"selected":""}>${n}</option>`).join("")}</select></label>`).join("")}<button class="btn" id="ok">Calculer ma note</button></div>`;
     bindBack(back);document.getElementById("ok").onclick=()=>{let n=0;app.querySelectorAll("select").forEach(x=>n+=+x.value);note20(o.t,n,back)}}}
 function examQCM(){AUSRC=null;const back=()=>go("exam"),pool=[];L.forEach((x,l)=>x.q.forEach((_,k)=>pool.push([l,k])));const items=shuf(pool).slice(0,30),res=[];let i=0,over=false;
   app.innerHTML=hdr("QCM · 30 questions")+`<div class="timer" id="tmr"></div><div id="qz"></div>`;bindBack(back);
@@ -602,7 +606,7 @@ function simHub(){const back=()=>go("exam");
   document.getElementById("dl").onclick=()=>dilem(sc=>end("dil",sc,simHub),simHub)}
 
 /* ===================== INSTALLATION ET MISE À JOUR ===================== */
-const APP_V="2026.11.16.2";let INST=null,SWR=null;
+const APP_V="2026.11.17.1";let INST=null,SWR=null;
 const standalone=()=>{try{return matchMedia("(display-mode: standalone)").matches||navigator.standalone===true}catch(e){return false}};
 try{window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();INST=e;const b=document.getElementById("inst");if(b)b.style.display="block"})}catch(e){}
 try{if("serviceWorker" in navigator&&location.protocol==="https:"&&!/claude\.ai|claudeusercontent/.test(location.host))navigator.serviceWorker.register("sw.js").then(r=>{SWR=r;r.addEventListener("updatefound",()=>{const w=r.installing;if(w)w.addEventListener("statechange",()=>{if(w.state==="installed"&&navigator.serviceWorker.controller)toast("Nouvelle version disponible : Profil → Mettre à jour.")})})}).catch(()=>{})}catch(e){}
@@ -648,7 +652,7 @@ window.addEventListener("hashchange",()=>{const h=location.hash.slice(1);if(["ho
 
 window.__CF={L:L,AT:typeof AT!=="undefined"?AT:null,open:(l,i)=>lire(l,[i],()=>go("fiches"),()=>go("fiches"))};
 }}));
-TRACKS.push(Object.assign({"id": "com", "key": "ohipa-com-v1", "ic": "🛒", "name": "Commerce", "sub": "Caisse, mise en rayon, vente, relation client", "col": ["#7a4fa3", "#ece3f6", "#c3a2e8", "#40295c"]},{run:function(){
+TRACKS.push(Object.assign({"id": "com", "key": "ohipa-com-v1", "ic": "🛒", "name": "Commerce", "sub": "Caisse, mise en rayon, vente, relation client", "col": ["#7a4fa3", "#ece3f6", "#c3a2e8", "#40295c"], "hint": "Caissier : métier le plus recherché", "ranks": ["Débutant", "Employé", "Hôte de caisse", "Vendeur", "Vendeur confirmé", "Chef de rayon", "Responsable"]},{run:function(){
 "use strict";
 const J={"MAG": {"n": "M. Tamatoa", "r": "Directeur de magasin", "c": "#0f6e78"}, "CAI": {"n": "Mme Rava", "r": "Responsable des caisses", "c": "#b8402a"}, "RAY": {"n": "M. Hiro", "r": "Chef de rayon", "c": "#2c8a57"}, "VEN": {"n": "Mme Poerava", "r": "Responsable des ventes", "c": "#7a4fa3"}};
 const GRILLE=["Politesse", "Exactitude des calculs", "Respect des procédures de caisse", "Argument de vente clair", "Exemple concret", "Relecture"];
@@ -702,14 +706,14 @@ function mix(n,l){ // révision : erreurs d'abord, puis tirage dans les niveaux 
   const pool=[];for(let i=0;i<=l;i++)L[i].q.forEach((_,k)=>pool.push(i+"."+k));
   const w=shuf(S.w.filter(k=>pool.includes(k))),rest=shuf(pool.filter(k=>!w.includes(k)));
   return w.concat(rest).slice(0,n).map(k=>k.split(".").map(Number));}
-function plan(l,d){const Q=a=>a.map(k=>[l,k]),m=SIMMAP[l],sn=m==="dil"?"Dilemmes du magasin":"Atelier : "+AT[+m.slice(2)].t;
+function plan(l,d){const Q=a=>a.map(k=>[l,k]),m=SIMMAP[l],sn=m==="dil"?"Dilemme du métier":"Atelier : "+AT[+m.slice(2)].t;
   return [
-  [{k:"lire",f:[0,1],m:12},{k:"quiz",q:()=>Q(rng(0,6)),m:10},{k:"sim",m:15,n:sn}],
-  [{k:"lire",f:[2,3],m:12},{k:"quiz",q:()=>Q(rng(6,12)),m:10},{k:"cas",c:[0],m:8}],
-  [{k:"oral",o:[0],m:10},{k:"cas",c:[1],m:8},{k:"quiz",q:()=>mix(8,l),m:10,n:"Révision"}],
-  [{k:"oral",o:[1],m:10},{k:"lire",f:[0,1,2,3],m:12,n:"Relecture des fiches"},{k:"quiz",q:()=>mix(10,l),m:12,n:"Révision ciblée"}],
-  [{k:"quiz",q:()=>shuf(Q(rng(0,12))),m:15,n:"Épreuve du niveau"},{k:"ecrit",m:30}]][d];}
-const LBL={sim:["🧩","Simulation"],lire:["📖","Fiches à lire"],quiz:["✅","Quiz"],cas:["🧭","Mise en situation"],oral:["🎙️","Devant le jury"],ecrit:["✍️","Cas écrit"]};
+  [{k:"lire",f:[0],m:4},{k:"quiz",q:()=>Q(rng(0,6)),m:5},{k:"cas",c:[0],m:4}],
+  [{k:"lire",f:[1],m:4},{k:"quiz",q:()=>Q(rng(6,12)),m:5},{k:"sim",m:6,n:sn}],
+  [{k:"lire",f:[2],m:4},{k:"cas",c:[1],m:4},{k:"quiz",q:()=>mix(6,l),m:4,n:"Révision"}],
+  [{k:"lire",f:[3],m:4},{k:"oral",o:[0],m:5},{k:"quiz",q:()=>mix(6,l),m:4,n:"Révision ciblée"}],
+  [{k:"oral",o:[1],m:5},{k:"quiz",q:()=>shuf(Q(rng(0,12))),m:8,n:"Défi du niveau"}]][d];}
+const LBL={sim:["🧩","Simulation"],lire:["📖","Fiches à lire"],quiz:["✅","Quiz"],cas:["🧭","Mise en situation"],oral:["🎙️","Face au recruteur"],ecrit:["✍️","Cas écrit"]};
 const sk=(l,d,i)=>l+"."+d+"."+i;
 const dayDone=(l,d)=>plan(l,d).every((_,i)=>sk(l,d,i) in S.s);
 function curDay(){for(let n=0;n<NS;n++){const l=Math.floor(n/5),d=n%5;if(!dayDone(l,d))return n}return NS}
@@ -741,7 +745,7 @@ function readOut(btn){
   btn.textContent="⏹ Arrêter"}catch(e){}}
 function hdr(title,back){return `<div class="top"><button class="back" id="bk">←</button><b>${title}</b><button class="au" id="au">🔊 Écouter</button></div>`}
 function bindBack(fn){const b=document.getElementById("bk");if(b)b.onclick=()=>{halt();fn()};const a=document.getElementById("au");if(a)a.onclick=()=>readOut(a)}
-function setNav(v){const it=[["home","🏝️","Accueil"],["parcours","🗺️","Parcours"],["fiches","📚","Fiches"],["exam","⏱️","Examens"],["profil","👤","Profil"]];
+function setNav(v){const it=[["home","🏝️","Accueil"],["parcours","🗺️","Parcours"],["fiches","📚","Fiches"],["exam","⏱️","Entretien"],["profil","👤","Profil"]];
   nav.innerHTML=it.map(x=>`<button class="${x[0]===v?"on":""}" data-v="${x[0]}"><span>${x[1]}</span>${x[2]}</button>`).join("");
   nav.querySelectorAll("button").forEach(b=>b.onclick=()=>go(b.dataset.v))}
 function go(v,a,b){halt();AUSRC=null;window.scrollTo(0,0);setNav(v);({home,parcours,fiches,conseil,profil,day,exam})[v](a,b);try{if(v!=="day")location.hash=v}catch(e){}}
@@ -750,19 +754,21 @@ function go(v,a,b){halt();AUSRC=null;window.scrollTo(0,0);setNav(v);({home,parco
 function home(){const n=curDay(),l=Math.floor(n/5),d=n%5,{r,nx}=rank(),pct=Math.round(n/NS*100);
   app.innerHTML=`<div class="band"></div><button class="chg" id="chg">⇄ Voies</button><h1>Commerce</h1><p class="mut">Caisse, mise en rayon, vente, relation client</p>
   <div class="card hero">${n<NS?`<small>Séance ${n+1} sur ${NS} · Niveau ${l+1}</small><h2 style="margin:4px 0">${L[l].t}</h2><small>${DAYN[d]} · environ ${plan(l,d).reduce((s,x)=>s+x.m,0)} min</small><button class="btn wh" id="goDay">Commencer la séance</button>`:`<h2 style="margin:4px 0">Parcours terminé 🎉</h2><small>Continue avec les révisions, les ateliers et les entretiens.</small>`}</div>
-  <div class="card"><div class="row"><div class="stat"><b>${streak()}</b><small>jours de suite</small></div><div class="stat"><b>${S.xp}</b><small>points</small></div><div class="stat"><b>${pct}%</b><small>parcours</small></div></div>
-  <div class="bar"><i style="width:${nx?Math.min(100,(S.xp-r[0])/(nx[0]-r[0])*100):100}%"></i></div><small>Grade : <b>${r[1]}</b>${nx?` · prochain : ${nx[1]} à ${nx[0]} points`:""}</small></div>
-  <button class="btn sec" id="rev">Réviser mes erreurs (${S.w.length})</button>
-  <button class="btn sec" id="cs">S'entraîner devant le jury</button>
-  <button class="btn sec" id="exb">Épreuves en conditions réelles</button>
-  <button class="btn sec" id="smb">Ateliers et dilemmes</button>
+  ${S.xp?`<div class="card"><div class="row"><div class="stat"><b>${streak()}</b><small>jours de suite</small></div><div class="stat"><b>${S.xp}</b><small>points</small></div><div class="stat"><b>${pct}%</b><small>parcours</small></div></div>
+  <div class="bar"><i style="width:${nx?Math.min(100,(S.xp-r[0])/(nx[0]-r[0])*100):100}%"></i></div><small>Grade : <b>${r[1]}</b>${nx?` · prochain : ${nx[1]} à ${nx[0]} points`:""}</small></div>`:`<div class="card"><h3 style="margin-top:0">Ia ora na, bienvenue !</h3><p class="mut" style="margin:0">Une séance dure 12 à 15 minutes : une fiche courte, un petit quiz, une mise en situation. Chaque étape te rapporte des points et te fait monter en grade, de ${RANKS[0][1]} à ${RANKS[RANKS.length-1][1]}.</p></div>`}
+  <div class="tiles">
+   <button class="tile" id="rev"${S.w.length?"":" hidden"}><span>🔁</span><b>Réviser</b><small>${S.w.length} erreur${S.w.length>1?"s":""} à revoir</small></button>
+   <button class="tile" id="cs"><span>🎙️</span><b>Recruteur</b><small>Questions d'entretien</small></button>
+   <button class="tile" id="exb"><span>💼</span><b>Simulation d'embauche</b><small>Entretien et test chronométrés</small></button>
+   <button class="tile" id="smb"><span>🧮</span><b>Ateliers</b><small>Calculs et dilemmes du métier</small></button>
+  </div>
   <button class="btn" id="inst" style="display:${INST&&!standalone()?"block":"none"}">📲 Installer l'application</button>
   <div class="card warn"><h3>À savoir</h3><p class="mut">Ce parcours prépare au métier et à l'entretien d'embauche. Il ne remplace ni la formation, ni les habilitations, ni les consignes de l'employeur.</p></div>`;
   const g=document.getElementById("goDay");if(g)g.onclick=()=>go("day",l,d);
   document.getElementById("rev").onclick=()=>{const it=mix(10,L.length-1);quiz(it,"Révision",sc=>{gain("",sc);go("home")},()=>go("home"))};
   document.getElementById("cs").onclick=()=>go("conseil");document.getElementById("exb").onclick=()=>go("exam");document.getElementById("smb").onclick=simHub;document.getElementById("inst").onclick=installApp}
 function parcours(){const cur=curDay();
-  app.innerHTML=`<h1>Parcours</h1><p class="mut">${L.length} niveaux · ${NS} séances d'environ 40 minutes. À 5 séances par semaine : ${L.length} semaines ; tous les jours : environ ${Math.ceil(NS/7)}.</p>`+L.map((x,l)=>`<div class="card"><div class="lvl"><div class="num">${l+1}</div><div style="flex:1"><h3>${x.t}</h3><small>${x.s}</small><div class="days">${DAYN.map((n,d)=>{const i=l*5+d,dn=dayDone(l,d),lk=!S.free&&i>cur;return `<button class="day ${dn?"done":i===cur?"cur":lk?"lock":""}" data-l="${l}" data-d="${d}" ${lk?"disabled":""}>${dn?"✓":n}</button>`}).join("")}</div></div></div></div>`).join("");
+  app.innerHTML=`<h1>Parcours</h1><p class="mut">${L.length} niveaux · ${NS} séances courtes de 12 à 15 minutes. À 5 séances par semaine : ${L.length} semaines ; tous les jours : environ ${Math.ceil(NS/7)}.</p>`+L.map((x,l)=>`<div class="card"><div class="lvl"><div class="num">${l+1}</div><div style="flex:1"><h3>${x.t}</h3><small>${x.s}</small><div class="days">${DAYN.map((n,d)=>{const i=l*5+d,dn=dayDone(l,d),lk=!S.free&&i>cur;return `<button class="day ${dn?"done":i===cur?"cur":lk?"lock":""}" data-l="${l}" data-d="${d}" ${lk?"disabled":""}>${dn?"✓":n}</button>`}).join("")}</div></div></div></div>`).join("");
   app.querySelectorAll(".day").forEach(b=>b.onclick=()=>go("day",+b.dataset.l,+b.dataset.d))}
 function day(l,d){const P=plan(l,d);
   app.innerHTML=hdr(`Niveau ${l+1} · ${DAYN[d]}`)+`<h2>${L[l].t}</h2><p class="mut">Environ ${P.reduce((s,x)=>s+x.m,0)} minutes. Fais les étapes dans l'ordre.</p>`+P.map((p,i)=>{const k=sk(l,d,i),dn=k in S.s;return `<button class="step ${dn?"done":""}" data-i="${i}"><span class="ic">${LBL[p.k][0]}</span><span><b>${p.n||LBL[p.k][1]}</b><br><small>${p.m} min</small></span>${dn?`<span class="sc">${S.s[k]}%</span>`:""}</button>`}).join("")+(dayDone(l,d)?`<div class="card" style="text-align:center"><b>Séance validée ✓</b></div>`:"");
@@ -794,7 +800,7 @@ function timerBox(sec){return `<div class="timer" id="tmr">${fmt(sec)}</div><div
 const fmt=s=>(s>=3600?Math.floor(s/3600)+":"+String(Math.floor(s%3600/60)).padStart(2,"0"):Math.floor(s/60))+":"+String(s%60).padStart(2,"0");
 function bindTimer(sec){let left=sec;const el=document.getElementById("tmr"),b=document.getElementById("tgo");b.onclick=()=>{if(tm){halt();b.textContent="Reprendre";return}b.textContent="Pause";tm=setInterval(()=>{left--;el.textContent=fmt(Math.max(0,left));if(left<=0){halt();el.textContent="Temps écoulé";b.disabled=true}},1000)}}
 function oral(list,done,back){AUSRC=null;let i=0,tot=0;(function show(){const [l,k]=list[i],O=L[l].o[k],j=J[O[0]];halt();window.scrollTo(0,0);
-  app.innerHTML=hdr(`Le jury · ${i+1}/${list.length}`)+`<div class="card"><div class="jur"><div class="av" style="background:${j.c}">${j.n.split(" ").pop()[0]}</div><div><b>${j.n}</b><br><small>${j.r}</small></div></div><p class="q">« ${O[1]} »</p><p class="mut">Prends une minute pour réfléchir, puis réponds <b>à voix haute</b> pendant trois minutes, comme devant le jury.</p>${timerBox(240)}<p class="mut" style="margin-top:12px">Notes (facultatif)</p><textarea id="nt" placeholder="Mots-clés de ta réponse…"></textarea><button class="btn" id="rv">Voir ce que le jury attend</button><div id="fb"></div></div>`;
+  app.innerHTML=hdr(`Le jury · ${i+1}/${list.length}`)+`<div class="card"><div class="jur"><div class="av" style="background:${j.c}">${j.n.split(" ").pop()[0]}</div><div><b>${j.n}</b><br><small>${j.r}</small></div></div><p class="q">« ${O[1]} »</p><p class="mut">Prends une minute pour réfléchir, puis réponds <b>à voix haute</b> pendant trois minutes, comme face au recruteur.</p>${timerBox(240)}<p class="mut" style="margin-top:12px">Notes (facultatif)</p><textarea id="nt" placeholder="Mots-clés de ta réponse…"></textarea><button class="btn" id="rv">Voir ce que le recruteur attend</button><div id="fb"></div></div>`;
   bindBack(back);bindTimer(240);document.getElementById("rv").onclick=e=>{halt();e.target.remove();
     document.getElementById("fb").innerHTML=`<div class="fb"><b>Coche ce que tu as vraiment dit :</b></div>${O[2].map((x,m)=>`<label class="ck"><input type="checkbox" data-m="${m}"><span>${x}</span></label>`).join("")}<button class="btn" id="nx">Valider</button>`;
     document.getElementById("nx").onclick=()=>{tot+=app.querySelectorAll("input:checked").length/O[2].length;i++;i<list.length?show():done(Math.round(tot/list.length*100))}}})()}
@@ -805,7 +811,7 @@ function ecrit(l,done,back,E){AUSRC=null;E=E||L[l].e;window.scrollTo(0,0);
     document.getElementById("nx").onclick=()=>done(Math.round(app.querySelectorAll("input:checked").length/GRILLE.length*100))}}
 function fiches(){app.innerHTML=`<h1>Fiches</h1><p class="mut">Tout le cours, à relire quand tu veux.</p><button class="btn sec" id="rep">📌 Aide-mémoire : les repères à connaître</button>`+L.map((x,l)=>`<div class="card"><h3>${l+1}. ${x.t}</h3>${x.f.map((f,i)=>`<button class="opt" data-l="${l}" data-i="${i}">${f[0]}</button>`).join("")}</div>`).join("");
   app.querySelectorAll(".opt").forEach(b=>b.onclick=()=>lire(+b.dataset.l,[+b.dataset.i],()=>go("fiches"),()=>go("fiches")));document.getElementById("rep").onclick=reperes}
-function conseil(){app.innerHTML=`<h1>Le jury</h1><p class="mut">Ton jury d'entraînement (personnages fictifs). Choisis qui t'interroge, ou laisse le hasard décider.</p>`+Object.keys(J).map(k=>`<button class="step" data-k="${k}"><span class="av" style="background:${J[k].c};flex:0 0 40px;height:40px">${J[k].n.split(" ").pop()[0]}</span><span><b>${J[k].n}</b><br><small>${J[k].r}</small></span></button>`).join("")+`<button class="btn" id="all">Entretien complet : 4 questions</button>`;
+function conseil(){app.innerHTML=`<h1>Les recruteurs</h1><p class="mut">Ton panel de recruteurs d'entraînement (personnages fictifs). Choisis qui t'interroge, ou laisse le hasard décider.</p>`+Object.keys(J).map(k=>`<button class="step" data-k="${k}"><span class="av" style="background:${J[k].c};flex:0 0 40px;height:40px">${J[k].n.split(" ").pop()[0]}</span><span><b>${J[k].n}</b><br><small>${J[k].r}</small></span></button>`).join("")+`<button class="btn" id="all">Entretien complet : 4 questions</button>`;
   const pick=(k,n)=>{const p=[];L.forEach((x,l)=>x.o.forEach((o,i)=>{if(!k||o[0]===k)p.push([l,i])}));return shuf(p).slice(0,n)};
   const run=list=>oral(list,sc=>end("",sc,()=>go("conseil")),()=>go("conseil"));
   app.querySelectorAll(".step").forEach(b=>b.onclick=()=>run(pick(b.dataset.k,2)));
@@ -814,21 +820,21 @@ function conseil(){app.innerHTML=`<h1>Le jury</h1><p class="mut">Ton jury d'entr
 function say(t){if(!TTS)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="fr-FR";u.rate=.97;const v=speechSynthesis.getVoices().find(v=>/^fr/i.test(v.lang));if(v)u.voice=v;speechSynthesis.speak(u)}catch(e){}}
 function count(sec,el,onEnd){let left=sec;el.textContent=fmt(left);if(tm)clearInterval(tm);tm=setInterval(()=>{left--;el.textContent=fmt(Math.max(0,left));if(left<=0){clearInterval(tm);tm=null;onEnd()}},1000)}
 function note20(title,n,back){S.ex.unshift([today(),title,n]);S.ex=S.ex.slice(0,30);end("",Math.round(n*5),back)}
-function exam(){app.innerHTML=`<h1>Conditions réelles</h1><p class="mut">Chrono sans pause, aucune correction avant la fin.</p>
+function exam(){app.innerHTML=`<h1>Simulation d'embauche</h1><p class="mut">Chrono sans pause, aucune correction avant la fin.</p>
   <button class="step" id="e1"><span class="ic">🎙️</span><span><b>Entretien d'embauche dans le commerce</b><br><small>20 min : 5 min de présentation, puis questions et relances</small></span></button>
-  <button class="step" id="e4"><span class="ic">✅</span><span><b>QCM de connaissances</b><br><small>30 questions en 20 min, correction à la fin</small></span></button>
+  <button class="step" id="e4"><span class="ic">✅</span><span><b>Test de connaissances</b><br><small>30 questions en 20 min, correction à la fin</small></span></button>
   <button class="btn sec" id="e6">Ateliers et dilemmes</button>
-  <button class="btn sec" id="e5">Entraînement libre devant le jury</button>
-  <div class="card"><h3>Mes résultats</h3>${S.ex.length?S.ex.map(x=>`<p style="display:flex;justify-content:space-between"><span>${x[0]} · ${x[1]}</span><b>${x[2]}/20</b></p>`).join(""):`<p class="mut">Aucune épreuve passée pour l'instant.</p>`}</div>
+  <button class="btn sec" id="e5">Entraînement libre avec le recruteur</button>
+  <div class="card"><h3>Mes résultats</h3>${S.ex.length?S.ex.map(x=>`<p style="display:flex;justify-content:space-between"><span>${x[0]} · ${x[1]}</span><b>${x[2]}/20</b></p>`).join(""):`<p class="mut">Aucune simulation passée pour l'instant.</p>`}</div>
   <div class="card warn"><h3>Ce que le jeu ne remplace pas</h3><p class="mut">La caisse demande de l'entraînement : refais les calculs de monnaie jusqu'à les faire de tête.</p></div>`;
   const pool=()=>{const p=X.slice();L.forEach(x=>x.o.forEach(o=>p.push(o)));return p};
   document.getElementById("e1").onclick=()=>examOral({t:"Entretien commerce",expo:5,total:20,pool});
   document.getElementById("e4").onclick=examQCM;document.getElementById("e5").onclick=()=>go("conseil");document.getElementById("e6").onclick=simHub}
 function examOral(o){AUSRC=null;const back=()=>go("exam"),asked=[];
-  app.innerHTML=hdr(o.t)+`<div class="card fiche"><h2 style="margin-top:0">Déroulement</h2><ul><li><b>${o.expo} minutes</b> d'exposé : ton parcours et ton projet. À la fin du temps, le jury te coupe.</li><li>Puis des questions jusqu'à <b>${o.total} minutes</b> au total, sans préparation, avec des relances.</li><li>Réponds <b>à voix haute</b>. Tu ne verras les attendus qu'au débriefing.</li><li>Aucune pause. Quitter l'écran annule l'épreuve.</li></ul><label class="ck" style="border:0"><input type="checkbox" id="vx" ${TTS?"checked":"disabled"}><span>Le jury pose ses questions à voix haute${TTS?"":" (indisponible sur cet appareil)"}</span></label><button class="btn" id="st">Entrer dans la salle</button></div>`;
+  app.innerHTML=hdr(o.t)+`<div class="card fiche"><h2 style="margin-top:0">Déroulement</h2><ul><li><b>${o.expo} minutes</b> d'exposé : ton parcours et ton projet. À la fin du temps, le recruteur te coupe.</li><li>Puis des questions jusqu'à <b>${o.total} minutes</b> au total, sans préparation, avec des relances.</li><li>Réponds <b>à voix haute</b>. Tu ne verras les attendus qu'au débriefing.</li><li>Aucune pause. Quitter l'écran annule l'épreuve.</li></ul><label class="ck" style="border:0"><input type="checkbox" id="vx" ${TTS?"checked":"disabled"}><span>Le recruteur pose ses questions à voix haute${TTS?"":" (indisponible sur cet appareil)"}</span></label><button class="btn" id="st">Entrer dans la salle</button></div>`;
   bindBack(back);document.getElementById("st").onclick=()=>p1(document.getElementById("vx").checked);
   function p1(voice){const line=`Bonjour. Installez-vous. Vous avez ${o.expo} minutes pour vous présenter, nous vous écoutons.`,t0=Date.now();window.scrollTo(0,0);
-    app.innerHTML=`<div class="card"><span class="tag">Exposé</span><p class="q">« ${line} »</p><div class="timer" id="tmr"></div><p class="mut">Regarde l'écran comme tu regarderais le jury. Ne lis pas tes notes.</p><button class="btn" id="nx">J'ai terminé mon exposé</button></div>`;
+    app.innerHTML=`<div class="card"><span class="tag">Exposé</span><p class="q">« ${line} »</p><div class="timer" id="tmr"></div><p class="mut">Regarde l'écran comme tu regarderais le recruteur. Ne lis pas tes notes.</p><button class="btn" id="nx">J'ai terminé mon exposé</button></div>`;
     if(voice)say(line);const nx=cut=>{clearInterval(tm);tm=null;p2(voice,cut,Math.round((Date.now()-t0)/1000))};
     count(o.expo*60,document.getElementById("tmr"),()=>nx(true));document.getElementById("nx").onclick=()=>nx(false)}
   function p2(voice,cut,used){const qs=shuf(o.pool()).slice(0,16);let i=-1,rel=false,over=false;window.scrollTo(0,0);
@@ -838,8 +844,8 @@ function examOral(o){AUSRC=null;const back=()=>go("exam"),asked=[];
     const put=(q,txt,pre)=>{const j=J[q[0]];document.getElementById("qz").innerHTML=`<div class="jur"><div class="av" style="background:${j.c}">${j.n.split(" ").pop()[0]}</div><div><b>${j.n}</b><br><small>${j.r}</small></div></div><p class="q">« ${pre||""}${txt} »</p>`;if(voice)say((pre||"")+txt)};
     const nxt=()=>{if(!rel&&i>=0&&Math.random()<.35){rel=true;put(qs[i],RELANCES[Math.floor(Math.random()*RELANCES.length)])}else{rel=false;i++;if(i>=qs.length)return fin();asked.push(qs[i]);put(qs[i],qs[i][1],i===0&&cut?"Je vous interromps, le temps de l'exposé est écoulé. ":"")}};
     document.getElementById("nx").onclick=nxt;nxt()}
-  function debrief(cut,used){const tgt=o.expo*60,msg=cut?"interrompu par le jury : exposé trop long ou mal minuté":used<tgt*.6?"nettement trop court : tu laisses du temps aux questions difficiles":"durée correcte";window.scrollTo(0,0);
-    app.innerHTML=hdr("Débriefing")+`<div class="card"><p><b>Exposé : ${fmt(used)}</b> sur ${o.expo}:00, ${msg}.</p><p><b>${asked.length} questions</b> traitées. Ouvre chacune et compare avec ce que tu as réellement dit.</p></div>`+asked.map(q=>`<details class="card"><summary><b>${J[q[0]].n} :</b> ${q[1]}</summary><ul>${q[2].map(k=>`<li>${k}</li>`).join("")}</ul></details>`).join("")+`<div class="card"><h3>Grille du jury</h3><p class="mut">Note-toi comme un jury le ferait : 0 = absent, 2 = moyen, 4 = excellent.</p>${CRIT.map(c=>`<label class="ck"><span style="flex:1">${c}</span><select>${[0,1,2,3,4].map(n=>`<option ${n===2?"selected":""}>${n}</option>`).join("")}</select></label>`).join("")}<button class="btn" id="ok">Calculer ma note</button></div>`;
+  function debrief(cut,used){const tgt=o.expo*60,msg=cut?"interrompu par le recruteur : exposé trop long ou mal minuté":used<tgt*.6?"nettement trop court : tu laisses du temps aux questions difficiles":"durée correcte";window.scrollTo(0,0);
+    app.innerHTML=hdr("Débriefing")+`<div class="card"><p><b>Exposé : ${fmt(used)}</b> sur ${o.expo}:00, ${msg}.</p><p><b>${asked.length} questions</b> traitées. Ouvre chacune et compare avec ce que tu as réellement dit.</p></div>`+asked.map(q=>`<details class="card"><summary><b>${J[q[0]].n} :</b> ${q[1]}</summary><ul>${q[2].map(k=>`<li>${k}</li>`).join("")}</ul></details>`).join("")+`<div class="card"><h3>Grille du recruteur</h3><p class="mut">Note-toi comme un recruteur le ferait : 0 = absent, 2 = moyen, 4 = excellent.</p>${CRIT.map(c=>`<label class="ck"><span style="flex:1">${c}</span><select>${[0,1,2,3,4].map(n=>`<option ${n===2?"selected":""}>${n}</option>`).join("")}</select></label>`).join("")}<button class="btn" id="ok">Calculer ma note</button></div>`;
     bindBack(back);document.getElementById("ok").onclick=()=>{let n=0;app.querySelectorAll("select").forEach(x=>n+=+x.value);note20(o.t,n,back)}}}
 function examQCM(){AUSRC=null;const back=()=>go("exam"),pool=[];L.forEach((x,l)=>x.q.forEach((_,k)=>pool.push([l,k])));const items=shuf(pool).slice(0,30),res=[];let i=0,over=false;
   app.innerHTML=hdr("QCM · 30 questions")+`<div class="timer" id="tmr"></div><div id="qz"></div>`;bindBack(back);
@@ -887,7 +893,7 @@ function simHub(){const back=()=>go("exam");
   document.getElementById("dl").onclick=()=>dilem(sc=>end("dil",sc,simHub),simHub)}
 
 /* ===================== INSTALLATION ET MISE À JOUR ===================== */
-const APP_V="2026.11.16.2";let INST=null,SWR=null;
+const APP_V="2026.11.17.1";let INST=null,SWR=null;
 const standalone=()=>{try{return matchMedia("(display-mode: standalone)").matches||navigator.standalone===true}catch(e){return false}};
 try{window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();INST=e;const b=document.getElementById("inst");if(b)b.style.display="block"})}catch(e){}
 try{if("serviceWorker" in navigator&&location.protocol==="https:"&&!/claude\.ai|claudeusercontent/.test(location.host))navigator.serviceWorker.register("sw.js").then(r=>{SWR=r;r.addEventListener("updatefound",()=>{const w=r.installing;if(w)w.addEventListener("statechange",()=>{if(w.state==="installed"&&navigator.serviceWorker.controller)toast("Nouvelle version disponible : Profil → Mettre à jour.")})})}).catch(()=>{})}catch(e){}
@@ -933,7 +939,7 @@ window.addEventListener("hashchange",()=>{const h=location.hash.slice(1);if(["ho
 
 window.__CF={L:L,AT:typeof AT!=="undefined"?AT:null,open:(l,i)=>lire(l,[i],()=>go("fiches"),()=>go("fiches"))};
 }}));
-TRACKS.push(Object.assign({"id": "log", "key": "ohipa-log-v1", "ic": "🚚", "name": "Logistique et transport", "sub": "Magasinier, cariste, livreur, fret et douane", "col": ["#2f4f8f", "#dfe6f5", "#8fb0ee", "#263a66"]},{run:function(){
+TRACKS.push(Object.assign({"id": "log", "key": "ohipa-log-v1", "ic": "🚚", "name": "Logistique et transport", "sub": "Magasinier, cariste, livreur, fret et douane", "col": ["#2f4f8f", "#dfe6f5", "#8fb0ee", "#263a66"], "hint": "Transport et tourisme : 12 % des embauches", "ranks": ["Débutant", "Manutentionnaire", "Magasinier", "Magasinier confirmé", "Cariste", "Chef d'équipe", "Responsable"]},{run:function(){
 "use strict";
 const J={"ENT": {"n": "M. Manutea", "r": "Chef d'entrepôt", "c": "#0f6e78"}, "TRA": {"n": "Mme Teura", "r": "Responsable transport", "c": "#b8402a"}, "DOU": {"n": "M. Rahiti", "r": "Déclarant en douane", "c": "#3d5a99"}, "SEC": {"n": "Mme Heiata", "r": "Préventrice sécurité", "c": "#2c8a57"}};
 const GRILLE=["Procédure respectée", "Sécurité citée", "Calcul juste", "Vocabulaire du métier", "Exemple concret", "Relecture"];
@@ -987,14 +993,14 @@ function mix(n,l){ // révision : erreurs d'abord, puis tirage dans les niveaux 
   const pool=[];for(let i=0;i<=l;i++)L[i].q.forEach((_,k)=>pool.push(i+"."+k));
   const w=shuf(S.w.filter(k=>pool.includes(k))),rest=shuf(pool.filter(k=>!w.includes(k)));
   return w.concat(rest).slice(0,n).map(k=>k.split(".").map(Number));}
-function plan(l,d){const Q=a=>a.map(k=>[l,k]),m=SIMMAP[l],sn=m==="dil"?"Dilemmes de l'entrepôt":"Atelier : "+AT[+m.slice(2)].t;
+function plan(l,d){const Q=a=>a.map(k=>[l,k]),m=SIMMAP[l],sn=m==="dil"?"Dilemme du métier":"Atelier : "+AT[+m.slice(2)].t;
   return [
-  [{k:"lire",f:[0,1],m:12},{k:"quiz",q:()=>Q(rng(0,6)),m:10},{k:"sim",m:15,n:sn}],
-  [{k:"lire",f:[2,3],m:12},{k:"quiz",q:()=>Q(rng(6,12)),m:10},{k:"cas",c:[0],m:8}],
-  [{k:"oral",o:[0],m:10},{k:"cas",c:[1],m:8},{k:"quiz",q:()=>mix(8,l),m:10,n:"Révision"}],
-  [{k:"oral",o:[1],m:10},{k:"lire",f:[0,1,2,3],m:12,n:"Relecture des fiches"},{k:"quiz",q:()=>mix(10,l),m:12,n:"Révision ciblée"}],
-  [{k:"quiz",q:()=>shuf(Q(rng(0,12))),m:15,n:"Épreuve du niveau"},{k:"ecrit",m:30}]][d];}
-const LBL={sim:["🧩","Simulation"],lire:["📖","Fiches à lire"],quiz:["✅","Quiz"],cas:["🧭","Mise en situation"],oral:["🎙️","Devant le jury"],ecrit:["✍️","Cas écrit"]};
+  [{k:"lire",f:[0],m:4},{k:"quiz",q:()=>Q(rng(0,6)),m:5},{k:"cas",c:[0],m:4}],
+  [{k:"lire",f:[1],m:4},{k:"quiz",q:()=>Q(rng(6,12)),m:5},{k:"sim",m:6,n:sn}],
+  [{k:"lire",f:[2],m:4},{k:"cas",c:[1],m:4},{k:"quiz",q:()=>mix(6,l),m:4,n:"Révision"}],
+  [{k:"lire",f:[3],m:4},{k:"oral",o:[0],m:5},{k:"quiz",q:()=>mix(6,l),m:4,n:"Révision ciblée"}],
+  [{k:"oral",o:[1],m:5},{k:"quiz",q:()=>shuf(Q(rng(0,12))),m:8,n:"Défi du niveau"}]][d];}
+const LBL={sim:["🧩","Simulation"],lire:["📖","Fiches à lire"],quiz:["✅","Quiz"],cas:["🧭","Mise en situation"],oral:["🎙️","Face au recruteur"],ecrit:["✍️","Cas écrit"]};
 const sk=(l,d,i)=>l+"."+d+"."+i;
 const dayDone=(l,d)=>plan(l,d).every((_,i)=>sk(l,d,i) in S.s);
 function curDay(){for(let n=0;n<NS;n++){const l=Math.floor(n/5),d=n%5;if(!dayDone(l,d))return n}return NS}
@@ -1026,7 +1032,7 @@ function readOut(btn){
   btn.textContent="⏹ Arrêter"}catch(e){}}
 function hdr(title,back){return `<div class="top"><button class="back" id="bk">←</button><b>${title}</b><button class="au" id="au">🔊 Écouter</button></div>`}
 function bindBack(fn){const b=document.getElementById("bk");if(b)b.onclick=()=>{halt();fn()};const a=document.getElementById("au");if(a)a.onclick=()=>readOut(a)}
-function setNav(v){const it=[["home","🏝️","Accueil"],["parcours","🗺️","Parcours"],["fiches","📚","Fiches"],["exam","⏱️","Examens"],["profil","👤","Profil"]];
+function setNav(v){const it=[["home","🏝️","Accueil"],["parcours","🗺️","Parcours"],["fiches","📚","Fiches"],["exam","⏱️","Entretien"],["profil","👤","Profil"]];
   nav.innerHTML=it.map(x=>`<button class="${x[0]===v?"on":""}" data-v="${x[0]}"><span>${x[1]}</span>${x[2]}</button>`).join("");
   nav.querySelectorAll("button").forEach(b=>b.onclick=()=>go(b.dataset.v))}
 function go(v,a,b){halt();AUSRC=null;window.scrollTo(0,0);setNav(v);({home,parcours,fiches,conseil,profil,day,exam})[v](a,b);try{if(v!=="day")location.hash=v}catch(e){}}
@@ -1035,19 +1041,21 @@ function go(v,a,b){halt();AUSRC=null;window.scrollTo(0,0);setNav(v);({home,parco
 function home(){const n=curDay(),l=Math.floor(n/5),d=n%5,{r,nx}=rank(),pct=Math.round(n/NS*100);
   app.innerHTML=`<div class="band"></div><button class="chg" id="chg">⇄ Voies</button><h1>Logistique et transport</h1><p class="mut">Magasinier, cariste, livreur, fret et douane</p>
   <div class="card hero">${n<NS?`<small>Séance ${n+1} sur ${NS} · Niveau ${l+1}</small><h2 style="margin:4px 0">${L[l].t}</h2><small>${DAYN[d]} · environ ${plan(l,d).reduce((s,x)=>s+x.m,0)} min</small><button class="btn wh" id="goDay">Commencer la séance</button>`:`<h2 style="margin:4px 0">Parcours terminé 🎉</h2><small>Continue avec les révisions, les ateliers et les entretiens.</small>`}</div>
-  <div class="card"><div class="row"><div class="stat"><b>${streak()}</b><small>jours de suite</small></div><div class="stat"><b>${S.xp}</b><small>points</small></div><div class="stat"><b>${pct}%</b><small>parcours</small></div></div>
-  <div class="bar"><i style="width:${nx?Math.min(100,(S.xp-r[0])/(nx[0]-r[0])*100):100}%"></i></div><small>Grade : <b>${r[1]}</b>${nx?` · prochain : ${nx[1]} à ${nx[0]} points`:""}</small></div>
-  <button class="btn sec" id="rev">Réviser mes erreurs (${S.w.length})</button>
-  <button class="btn sec" id="cs">S'entraîner devant le jury</button>
-  <button class="btn sec" id="exb">Épreuves en conditions réelles</button>
-  <button class="btn sec" id="smb">Ateliers et dilemmes</button>
+  ${S.xp?`<div class="card"><div class="row"><div class="stat"><b>${streak()}</b><small>jours de suite</small></div><div class="stat"><b>${S.xp}</b><small>points</small></div><div class="stat"><b>${pct}%</b><small>parcours</small></div></div>
+  <div class="bar"><i style="width:${nx?Math.min(100,(S.xp-r[0])/(nx[0]-r[0])*100):100}%"></i></div><small>Grade : <b>${r[1]}</b>${nx?` · prochain : ${nx[1]} à ${nx[0]} points`:""}</small></div>`:`<div class="card"><h3 style="margin-top:0">Ia ora na, bienvenue !</h3><p class="mut" style="margin:0">Une séance dure 12 à 15 minutes : une fiche courte, un petit quiz, une mise en situation. Chaque étape te rapporte des points et te fait monter en grade, de ${RANKS[0][1]} à ${RANKS[RANKS.length-1][1]}.</p></div>`}
+  <div class="tiles">
+   <button class="tile" id="rev"${S.w.length?"":" hidden"}><span>🔁</span><b>Réviser</b><small>${S.w.length} erreur${S.w.length>1?"s":""} à revoir</small></button>
+   <button class="tile" id="cs"><span>🎙️</span><b>Recruteur</b><small>Questions d'entretien</small></button>
+   <button class="tile" id="exb"><span>💼</span><b>Simulation d'embauche</b><small>Entretien et test chronométrés</small></button>
+   <button class="tile" id="smb"><span>🧮</span><b>Ateliers</b><small>Calculs et dilemmes du métier</small></button>
+  </div>
   <button class="btn" id="inst" style="display:${INST&&!standalone()?"block":"none"}">📲 Installer l'application</button>
   <div class="card warn"><h3>À savoir</h3><p class="mut">Ce parcours prépare au métier et à l'entretien d'embauche. Il ne remplace ni la formation, ni les habilitations, ni les consignes de l'employeur.</p></div>`;
   const g=document.getElementById("goDay");if(g)g.onclick=()=>go("day",l,d);
   document.getElementById("rev").onclick=()=>{const it=mix(10,L.length-1);quiz(it,"Révision",sc=>{gain("",sc);go("home")},()=>go("home"))};
   document.getElementById("cs").onclick=()=>go("conseil");document.getElementById("exb").onclick=()=>go("exam");document.getElementById("smb").onclick=simHub;document.getElementById("inst").onclick=installApp}
 function parcours(){const cur=curDay();
-  app.innerHTML=`<h1>Parcours</h1><p class="mut">${L.length} niveaux · ${NS} séances d'environ 40 minutes. À 5 séances par semaine : ${L.length} semaines ; tous les jours : environ ${Math.ceil(NS/7)}.</p>`+L.map((x,l)=>`<div class="card"><div class="lvl"><div class="num">${l+1}</div><div style="flex:1"><h3>${x.t}</h3><small>${x.s}</small><div class="days">${DAYN.map((n,d)=>{const i=l*5+d,dn=dayDone(l,d),lk=!S.free&&i>cur;return `<button class="day ${dn?"done":i===cur?"cur":lk?"lock":""}" data-l="${l}" data-d="${d}" ${lk?"disabled":""}>${dn?"✓":n}</button>`}).join("")}</div></div></div></div>`).join("");
+  app.innerHTML=`<h1>Parcours</h1><p class="mut">${L.length} niveaux · ${NS} séances courtes de 12 à 15 minutes. À 5 séances par semaine : ${L.length} semaines ; tous les jours : environ ${Math.ceil(NS/7)}.</p>`+L.map((x,l)=>`<div class="card"><div class="lvl"><div class="num">${l+1}</div><div style="flex:1"><h3>${x.t}</h3><small>${x.s}</small><div class="days">${DAYN.map((n,d)=>{const i=l*5+d,dn=dayDone(l,d),lk=!S.free&&i>cur;return `<button class="day ${dn?"done":i===cur?"cur":lk?"lock":""}" data-l="${l}" data-d="${d}" ${lk?"disabled":""}>${dn?"✓":n}</button>`}).join("")}</div></div></div></div>`).join("");
   app.querySelectorAll(".day").forEach(b=>b.onclick=()=>go("day",+b.dataset.l,+b.dataset.d))}
 function day(l,d){const P=plan(l,d);
   app.innerHTML=hdr(`Niveau ${l+1} · ${DAYN[d]}`)+`<h2>${L[l].t}</h2><p class="mut">Environ ${P.reduce((s,x)=>s+x.m,0)} minutes. Fais les étapes dans l'ordre.</p>`+P.map((p,i)=>{const k=sk(l,d,i),dn=k in S.s;return `<button class="step ${dn?"done":""}" data-i="${i}"><span class="ic">${LBL[p.k][0]}</span><span><b>${p.n||LBL[p.k][1]}</b><br><small>${p.m} min</small></span>${dn?`<span class="sc">${S.s[k]}%</span>`:""}</button>`}).join("")+(dayDone(l,d)?`<div class="card" style="text-align:center"><b>Séance validée ✓</b></div>`:"");
@@ -1079,7 +1087,7 @@ function timerBox(sec){return `<div class="timer" id="tmr">${fmt(sec)}</div><div
 const fmt=s=>(s>=3600?Math.floor(s/3600)+":"+String(Math.floor(s%3600/60)).padStart(2,"0"):Math.floor(s/60))+":"+String(s%60).padStart(2,"0");
 function bindTimer(sec){let left=sec;const el=document.getElementById("tmr"),b=document.getElementById("tgo");b.onclick=()=>{if(tm){halt();b.textContent="Reprendre";return}b.textContent="Pause";tm=setInterval(()=>{left--;el.textContent=fmt(Math.max(0,left));if(left<=0){halt();el.textContent="Temps écoulé";b.disabled=true}},1000)}}
 function oral(list,done,back){AUSRC=null;let i=0,tot=0;(function show(){const [l,k]=list[i],O=L[l].o[k],j=J[O[0]];halt();window.scrollTo(0,0);
-  app.innerHTML=hdr(`Le jury · ${i+1}/${list.length}`)+`<div class="card"><div class="jur"><div class="av" style="background:${j.c}">${j.n.split(" ").pop()[0]}</div><div><b>${j.n}</b><br><small>${j.r}</small></div></div><p class="q">« ${O[1]} »</p><p class="mut">Prends une minute pour réfléchir, puis réponds <b>à voix haute</b> pendant trois minutes, comme devant le jury.</p>${timerBox(240)}<p class="mut" style="margin-top:12px">Notes (facultatif)</p><textarea id="nt" placeholder="Mots-clés de ta réponse…"></textarea><button class="btn" id="rv">Voir ce que le jury attend</button><div id="fb"></div></div>`;
+  app.innerHTML=hdr(`Le jury · ${i+1}/${list.length}`)+`<div class="card"><div class="jur"><div class="av" style="background:${j.c}">${j.n.split(" ").pop()[0]}</div><div><b>${j.n}</b><br><small>${j.r}</small></div></div><p class="q">« ${O[1]} »</p><p class="mut">Prends une minute pour réfléchir, puis réponds <b>à voix haute</b> pendant trois minutes, comme face au recruteur.</p>${timerBox(240)}<p class="mut" style="margin-top:12px">Notes (facultatif)</p><textarea id="nt" placeholder="Mots-clés de ta réponse…"></textarea><button class="btn" id="rv">Voir ce que le recruteur attend</button><div id="fb"></div></div>`;
   bindBack(back);bindTimer(240);document.getElementById("rv").onclick=e=>{halt();e.target.remove();
     document.getElementById("fb").innerHTML=`<div class="fb"><b>Coche ce que tu as vraiment dit :</b></div>${O[2].map((x,m)=>`<label class="ck"><input type="checkbox" data-m="${m}"><span>${x}</span></label>`).join("")}<button class="btn" id="nx">Valider</button>`;
     document.getElementById("nx").onclick=()=>{tot+=app.querySelectorAll("input:checked").length/O[2].length;i++;i<list.length?show():done(Math.round(tot/list.length*100))}}})()}
@@ -1090,7 +1098,7 @@ function ecrit(l,done,back,E){AUSRC=null;E=E||L[l].e;window.scrollTo(0,0);
     document.getElementById("nx").onclick=()=>done(Math.round(app.querySelectorAll("input:checked").length/GRILLE.length*100))}}
 function fiches(){app.innerHTML=`<h1>Fiches</h1><p class="mut">Tout le cours, à relire quand tu veux.</p><button class="btn sec" id="rep">📌 Aide-mémoire : les repères à connaître</button>`+L.map((x,l)=>`<div class="card"><h3>${l+1}. ${x.t}</h3>${x.f.map((f,i)=>`<button class="opt" data-l="${l}" data-i="${i}">${f[0]}</button>`).join("")}</div>`).join("");
   app.querySelectorAll(".opt").forEach(b=>b.onclick=()=>lire(+b.dataset.l,[+b.dataset.i],()=>go("fiches"),()=>go("fiches")));document.getElementById("rep").onclick=reperes}
-function conseil(){app.innerHTML=`<h1>Le jury</h1><p class="mut">Ton jury d'entraînement (personnages fictifs). Choisis qui t'interroge, ou laisse le hasard décider.</p>`+Object.keys(J).map(k=>`<button class="step" data-k="${k}"><span class="av" style="background:${J[k].c};flex:0 0 40px;height:40px">${J[k].n.split(" ").pop()[0]}</span><span><b>${J[k].n}</b><br><small>${J[k].r}</small></span></button>`).join("")+`<button class="btn" id="all">Entretien complet : 4 questions</button>`;
+function conseil(){app.innerHTML=`<h1>Les recruteurs</h1><p class="mut">Ton panel de recruteurs d'entraînement (personnages fictifs). Choisis qui t'interroge, ou laisse le hasard décider.</p>`+Object.keys(J).map(k=>`<button class="step" data-k="${k}"><span class="av" style="background:${J[k].c};flex:0 0 40px;height:40px">${J[k].n.split(" ").pop()[0]}</span><span><b>${J[k].n}</b><br><small>${J[k].r}</small></span></button>`).join("")+`<button class="btn" id="all">Entretien complet : 4 questions</button>`;
   const pick=(k,n)=>{const p=[];L.forEach((x,l)=>x.o.forEach((o,i)=>{if(!k||o[0]===k)p.push([l,i])}));return shuf(p).slice(0,n)};
   const run=list=>oral(list,sc=>end("",sc,()=>go("conseil")),()=>go("conseil"));
   app.querySelectorAll(".step").forEach(b=>b.onclick=()=>run(pick(b.dataset.k,2)));
@@ -1099,21 +1107,21 @@ function conseil(){app.innerHTML=`<h1>Le jury</h1><p class="mut">Ton jury d'entr
 function say(t){if(!TTS)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="fr-FR";u.rate=.97;const v=speechSynthesis.getVoices().find(v=>/^fr/i.test(v.lang));if(v)u.voice=v;speechSynthesis.speak(u)}catch(e){}}
 function count(sec,el,onEnd){let left=sec;el.textContent=fmt(left);if(tm)clearInterval(tm);tm=setInterval(()=>{left--;el.textContent=fmt(Math.max(0,left));if(left<=0){clearInterval(tm);tm=null;onEnd()}},1000)}
 function note20(title,n,back){S.ex.unshift([today(),title,n]);S.ex=S.ex.slice(0,30);end("",Math.round(n*5),back)}
-function exam(){app.innerHTML=`<h1>Conditions réelles</h1><p class="mut">Chrono sans pause, aucune correction avant la fin.</p>
+function exam(){app.innerHTML=`<h1>Simulation d'embauche</h1><p class="mut">Chrono sans pause, aucune correction avant la fin.</p>
   <button class="step" id="e1"><span class="ic">🎙️</span><span><b>Entretien d'embauche en logistique</b><br><small>20 min : 5 min de présentation, puis questions et relances</small></span></button>
-  <button class="step" id="e4"><span class="ic">✅</span><span><b>QCM de connaissances</b><br><small>30 questions en 20 min, correction à la fin</small></span></button>
+  <button class="step" id="e4"><span class="ic">✅</span><span><b>Test de connaissances</b><br><small>30 questions en 20 min, correction à la fin</small></span></button>
   <button class="btn sec" id="e6">Ateliers et dilemmes</button>
-  <button class="btn sec" id="e5">Entraînement libre devant le jury</button>
-  <div class="card"><h3>Mes résultats</h3>${S.ex.length?S.ex.map(x=>`<p style="display:flex;justify-content:space-between"><span>${x[0]} · ${x[1]}</span><b>${x[2]}/20</b></p>`).join(""):`<p class="mut">Aucune épreuve passée pour l'instant.</p>`}</div>
+  <button class="btn sec" id="e5">Entraînement libre avec le recruteur</button>
+  <div class="card"><h3>Mes résultats</h3>${S.ex.length?S.ex.map(x=>`<p style="display:flex;justify-content:space-between"><span>${x[0]} · ${x[1]}</span><b>${x[2]}/20</b></p>`).join(""):`<p class="mut">Aucune simulation passée pour l'instant.</p>`}</div>
   <div class="card warn"><h3>Ce que le jeu ne remplace pas</h3><p class="mut">La conduite d'un chariot demande une formation et une autorisation de l'employeur.</p></div>`;
   const pool=()=>{const p=X.slice();L.forEach(x=>x.o.forEach(o=>p.push(o)));return p};
   document.getElementById("e1").onclick=()=>examOral({t:"Entretien logistique",expo:5,total:20,pool});
   document.getElementById("e4").onclick=examQCM;document.getElementById("e5").onclick=()=>go("conseil");document.getElementById("e6").onclick=simHub}
 function examOral(o){AUSRC=null;const back=()=>go("exam"),asked=[];
-  app.innerHTML=hdr(o.t)+`<div class="card fiche"><h2 style="margin-top:0">Déroulement</h2><ul><li><b>${o.expo} minutes</b> d'exposé : ton parcours et ton projet. À la fin du temps, le jury te coupe.</li><li>Puis des questions jusqu'à <b>${o.total} minutes</b> au total, sans préparation, avec des relances.</li><li>Réponds <b>à voix haute</b>. Tu ne verras les attendus qu'au débriefing.</li><li>Aucune pause. Quitter l'écran annule l'épreuve.</li></ul><label class="ck" style="border:0"><input type="checkbox" id="vx" ${TTS?"checked":"disabled"}><span>Le jury pose ses questions à voix haute${TTS?"":" (indisponible sur cet appareil)"}</span></label><button class="btn" id="st">Entrer dans la salle</button></div>`;
+  app.innerHTML=hdr(o.t)+`<div class="card fiche"><h2 style="margin-top:0">Déroulement</h2><ul><li><b>${o.expo} minutes</b> d'exposé : ton parcours et ton projet. À la fin du temps, le recruteur te coupe.</li><li>Puis des questions jusqu'à <b>${o.total} minutes</b> au total, sans préparation, avec des relances.</li><li>Réponds <b>à voix haute</b>. Tu ne verras les attendus qu'au débriefing.</li><li>Aucune pause. Quitter l'écran annule l'épreuve.</li></ul><label class="ck" style="border:0"><input type="checkbox" id="vx" ${TTS?"checked":"disabled"}><span>Le recruteur pose ses questions à voix haute${TTS?"":" (indisponible sur cet appareil)"}</span></label><button class="btn" id="st">Entrer dans la salle</button></div>`;
   bindBack(back);document.getElementById("st").onclick=()=>p1(document.getElementById("vx").checked);
   function p1(voice){const line=`Bonjour. Installez-vous. Vous avez ${o.expo} minutes pour vous présenter, nous vous écoutons.`,t0=Date.now();window.scrollTo(0,0);
-    app.innerHTML=`<div class="card"><span class="tag">Exposé</span><p class="q">« ${line} »</p><div class="timer" id="tmr"></div><p class="mut">Regarde l'écran comme tu regarderais le jury. Ne lis pas tes notes.</p><button class="btn" id="nx">J'ai terminé mon exposé</button></div>`;
+    app.innerHTML=`<div class="card"><span class="tag">Exposé</span><p class="q">« ${line} »</p><div class="timer" id="tmr"></div><p class="mut">Regarde l'écran comme tu regarderais le recruteur. Ne lis pas tes notes.</p><button class="btn" id="nx">J'ai terminé mon exposé</button></div>`;
     if(voice)say(line);const nx=cut=>{clearInterval(tm);tm=null;p2(voice,cut,Math.round((Date.now()-t0)/1000))};
     count(o.expo*60,document.getElementById("tmr"),()=>nx(true));document.getElementById("nx").onclick=()=>nx(false)}
   function p2(voice,cut,used){const qs=shuf(o.pool()).slice(0,16);let i=-1,rel=false,over=false;window.scrollTo(0,0);
@@ -1123,8 +1131,8 @@ function examOral(o){AUSRC=null;const back=()=>go("exam"),asked=[];
     const put=(q,txt,pre)=>{const j=J[q[0]];document.getElementById("qz").innerHTML=`<div class="jur"><div class="av" style="background:${j.c}">${j.n.split(" ").pop()[0]}</div><div><b>${j.n}</b><br><small>${j.r}</small></div></div><p class="q">« ${pre||""}${txt} »</p>`;if(voice)say((pre||"")+txt)};
     const nxt=()=>{if(!rel&&i>=0&&Math.random()<.35){rel=true;put(qs[i],RELANCES[Math.floor(Math.random()*RELANCES.length)])}else{rel=false;i++;if(i>=qs.length)return fin();asked.push(qs[i]);put(qs[i],qs[i][1],i===0&&cut?"Je vous interromps, le temps de l'exposé est écoulé. ":"")}};
     document.getElementById("nx").onclick=nxt;nxt()}
-  function debrief(cut,used){const tgt=o.expo*60,msg=cut?"interrompu par le jury : exposé trop long ou mal minuté":used<tgt*.6?"nettement trop court : tu laisses du temps aux questions difficiles":"durée correcte";window.scrollTo(0,0);
-    app.innerHTML=hdr("Débriefing")+`<div class="card"><p><b>Exposé : ${fmt(used)}</b> sur ${o.expo}:00, ${msg}.</p><p><b>${asked.length} questions</b> traitées. Ouvre chacune et compare avec ce que tu as réellement dit.</p></div>`+asked.map(q=>`<details class="card"><summary><b>${J[q[0]].n} :</b> ${q[1]}</summary><ul>${q[2].map(k=>`<li>${k}</li>`).join("")}</ul></details>`).join("")+`<div class="card"><h3>Grille du jury</h3><p class="mut">Note-toi comme un jury le ferait : 0 = absent, 2 = moyen, 4 = excellent.</p>${CRIT.map(c=>`<label class="ck"><span style="flex:1">${c}</span><select>${[0,1,2,3,4].map(n=>`<option ${n===2?"selected":""}>${n}</option>`).join("")}</select></label>`).join("")}<button class="btn" id="ok">Calculer ma note</button></div>`;
+  function debrief(cut,used){const tgt=o.expo*60,msg=cut?"interrompu par le recruteur : exposé trop long ou mal minuté":used<tgt*.6?"nettement trop court : tu laisses du temps aux questions difficiles":"durée correcte";window.scrollTo(0,0);
+    app.innerHTML=hdr("Débriefing")+`<div class="card"><p><b>Exposé : ${fmt(used)}</b> sur ${o.expo}:00, ${msg}.</p><p><b>${asked.length} questions</b> traitées. Ouvre chacune et compare avec ce que tu as réellement dit.</p></div>`+asked.map(q=>`<details class="card"><summary><b>${J[q[0]].n} :</b> ${q[1]}</summary><ul>${q[2].map(k=>`<li>${k}</li>`).join("")}</ul></details>`).join("")+`<div class="card"><h3>Grille du recruteur</h3><p class="mut">Note-toi comme un recruteur le ferait : 0 = absent, 2 = moyen, 4 = excellent.</p>${CRIT.map(c=>`<label class="ck"><span style="flex:1">${c}</span><select>${[0,1,2,3,4].map(n=>`<option ${n===2?"selected":""}>${n}</option>`).join("")}</select></label>`).join("")}<button class="btn" id="ok">Calculer ma note</button></div>`;
     bindBack(back);document.getElementById("ok").onclick=()=>{let n=0;app.querySelectorAll("select").forEach(x=>n+=+x.value);note20(o.t,n,back)}}}
 function examQCM(){AUSRC=null;const back=()=>go("exam"),pool=[];L.forEach((x,l)=>x.q.forEach((_,k)=>pool.push([l,k])));const items=shuf(pool).slice(0,30),res=[];let i=0,over=false;
   app.innerHTML=hdr("QCM · 30 questions")+`<div class="timer" id="tmr"></div><div id="qz"></div>`;bindBack(back);
@@ -1172,7 +1180,7 @@ function simHub(){const back=()=>go("exam");
   document.getElementById("dl").onclick=()=>dilem(sc=>end("dil",sc,simHub),simHub)}
 
 /* ===================== INSTALLATION ET MISE À JOUR ===================== */
-const APP_V="2026.11.16.2";let INST=null,SWR=null;
+const APP_V="2026.11.17.1";let INST=null,SWR=null;
 const standalone=()=>{try{return matchMedia("(display-mode: standalone)").matches||navigator.standalone===true}catch(e){return false}};
 try{window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();INST=e;const b=document.getElementById("inst");if(b)b.style.display="block"})}catch(e){}
 try{if("serviceWorker" in navigator&&location.protocol==="https:"&&!/claude\.ai|claudeusercontent/.test(location.host))navigator.serviceWorker.register("sw.js").then(r=>{SWR=r;r.addEventListener("updatefound",()=>{const w=r.installing;if(w)w.addEventListener("statechange",()=>{if(w.state==="installed"&&navigator.serviceWorker.controller)toast("Nouvelle version disponible : Profil → Mettre à jour.")})})}).catch(()=>{})}catch(e){}
@@ -1218,7 +1226,7 @@ window.addEventListener("hashchange",()=>{const h=location.hash.slice(1);if(["ho
 
 window.__CF={L:L,AT:typeof AT!=="undefined"?AT:null,open:(l,i)=>lire(l,[i],()=>go("fiches"),()=>go("fiches"))};
 }}));
-TRACKS.push(Object.assign({"id": "ele", "key": "ohipa-ele-v1", "ic": "⚡", "name": "Électricité et maintenance", "sub": "Électricien, entretien des bâtiments, climatisation", "col": ["#b8862e", "#f6ecd6", "#e6c27a", "#4d3a14"]},{run:function(){
+TRACKS.push(Object.assign({"id": "ele", "key": "ohipa-ele-v1", "ic": "⚡", "name": "Électricité et maintenance", "sub": "Électricien, entretien des bâtiments, climatisation", "col": ["#b8862e", "#f6ecd6", "#e6c27a", "#4d3a14"], "hint": "Maintenance : 82 % des postes difficiles à pourvoir", "ranks": ["Débutant", "Aide", "Agent de maintenance", "Électricien", "Électricien confirmé", "Chef d'équipe", "Technicien référent"]},{run:function(){
 "use strict";
 const J={"ELE": {"n": "M. Tehotu", "r": "Chef électricien", "c": "#b8862e"}, "PRE": {"n": "Mme Mahana", "r": "Préventrice", "c": "#b8402a"}, "MAI": {"n": "M. Vatea", "r": "Responsable maintenance", "c": "#0f6e78"}, "FRO": {"n": "M. Tavita", "r": "Frigoriste", "c": "#3d5a99"}};
 const GRILLE=["Sécurité citée en premier", "Calcul juste avec l'unité", "Vocabulaire du métier", "Ordre logique", "Limites de son habilitation", "Relecture"];
@@ -1272,14 +1280,14 @@ function mix(n,l){ // révision : erreurs d'abord, puis tirage dans les niveaux 
   const pool=[];for(let i=0;i<=l;i++)L[i].q.forEach((_,k)=>pool.push(i+"."+k));
   const w=shuf(S.w.filter(k=>pool.includes(k))),rest=shuf(pool.filter(k=>!w.includes(k)));
   return w.concat(rest).slice(0,n).map(k=>k.split(".").map(Number));}
-function plan(l,d){const Q=a=>a.map(k=>[l,k]),m=SIMMAP[l],sn=m==="dil"?"Dilemmes du technicien":"Atelier : "+AT[+m.slice(2)].t;
+function plan(l,d){const Q=a=>a.map(k=>[l,k]),m=SIMMAP[l],sn=m==="dil"?"Dilemme du métier":"Atelier : "+AT[+m.slice(2)].t;
   return [
-  [{k:"lire",f:[0,1],m:12},{k:"quiz",q:()=>Q(rng(0,6)),m:10},{k:"sim",m:15,n:sn}],
-  [{k:"lire",f:[2,3],m:12},{k:"quiz",q:()=>Q(rng(6,12)),m:10},{k:"cas",c:[0],m:8}],
-  [{k:"oral",o:[0],m:10},{k:"cas",c:[1],m:8},{k:"quiz",q:()=>mix(8,l),m:10,n:"Révision"}],
-  [{k:"oral",o:[1],m:10},{k:"lire",f:[0,1,2,3],m:12,n:"Relecture des fiches"},{k:"quiz",q:()=>mix(10,l),m:12,n:"Révision ciblée"}],
-  [{k:"quiz",q:()=>shuf(Q(rng(0,12))),m:15,n:"Épreuve du niveau"},{k:"ecrit",m:30}]][d];}
-const LBL={sim:["🧩","Simulation"],lire:["📖","Fiches à lire"],quiz:["✅","Quiz"],cas:["🧭","Mise en situation"],oral:["🎙️","Devant le jury"],ecrit:["✍️","Cas écrit"]};
+  [{k:"lire",f:[0],m:4},{k:"quiz",q:()=>Q(rng(0,6)),m:5},{k:"cas",c:[0],m:4}],
+  [{k:"lire",f:[1],m:4},{k:"quiz",q:()=>Q(rng(6,12)),m:5},{k:"sim",m:6,n:sn}],
+  [{k:"lire",f:[2],m:4},{k:"cas",c:[1],m:4},{k:"quiz",q:()=>mix(6,l),m:4,n:"Révision"}],
+  [{k:"lire",f:[3],m:4},{k:"oral",o:[0],m:5},{k:"quiz",q:()=>mix(6,l),m:4,n:"Révision ciblée"}],
+  [{k:"oral",o:[1],m:5},{k:"quiz",q:()=>shuf(Q(rng(0,12))),m:8,n:"Défi du niveau"}]][d];}
+const LBL={sim:["🧩","Simulation"],lire:["📖","Fiches à lire"],quiz:["✅","Quiz"],cas:["🧭","Mise en situation"],oral:["🎙️","Face au recruteur"],ecrit:["✍️","Cas écrit"]};
 const sk=(l,d,i)=>l+"."+d+"."+i;
 const dayDone=(l,d)=>plan(l,d).every((_,i)=>sk(l,d,i) in S.s);
 function curDay(){for(let n=0;n<NS;n++){const l=Math.floor(n/5),d=n%5;if(!dayDone(l,d))return n}return NS}
@@ -1311,7 +1319,7 @@ function readOut(btn){
   btn.textContent="⏹ Arrêter"}catch(e){}}
 function hdr(title,back){return `<div class="top"><button class="back" id="bk">←</button><b>${title}</b><button class="au" id="au">🔊 Écouter</button></div>`}
 function bindBack(fn){const b=document.getElementById("bk");if(b)b.onclick=()=>{halt();fn()};const a=document.getElementById("au");if(a)a.onclick=()=>readOut(a)}
-function setNav(v){const it=[["home","🏝️","Accueil"],["parcours","🗺️","Parcours"],["fiches","📚","Fiches"],["exam","⏱️","Examens"],["profil","👤","Profil"]];
+function setNav(v){const it=[["home","🏝️","Accueil"],["parcours","🗺️","Parcours"],["fiches","📚","Fiches"],["exam","⏱️","Entretien"],["profil","👤","Profil"]];
   nav.innerHTML=it.map(x=>`<button class="${x[0]===v?"on":""}" data-v="${x[0]}"><span>${x[1]}</span>${x[2]}</button>`).join("");
   nav.querySelectorAll("button").forEach(b=>b.onclick=()=>go(b.dataset.v))}
 function go(v,a,b){halt();AUSRC=null;window.scrollTo(0,0);setNav(v);({home,parcours,fiches,conseil,profil,day,exam})[v](a,b);try{if(v!=="day")location.hash=v}catch(e){}}
@@ -1320,19 +1328,21 @@ function go(v,a,b){halt();AUSRC=null;window.scrollTo(0,0);setNav(v);({home,parco
 function home(){const n=curDay(),l=Math.floor(n/5),d=n%5,{r,nx}=rank(),pct=Math.round(n/NS*100);
   app.innerHTML=`<div class="band"></div><button class="chg" id="chg">⇄ Voies</button><h1>Électricité et maintenance</h1><p class="mut">Électricien, entretien des bâtiments, climatisation</p>
   <div class="card hero">${n<NS?`<small>Séance ${n+1} sur ${NS} · Niveau ${l+1}</small><h2 style="margin:4px 0">${L[l].t}</h2><small>${DAYN[d]} · environ ${plan(l,d).reduce((s,x)=>s+x.m,0)} min</small><button class="btn wh" id="goDay">Commencer la séance</button>`:`<h2 style="margin:4px 0">Parcours terminé 🎉</h2><small>Continue avec les révisions, les ateliers et les entretiens.</small>`}</div>
-  <div class="card"><div class="row"><div class="stat"><b>${streak()}</b><small>jours de suite</small></div><div class="stat"><b>${S.xp}</b><small>points</small></div><div class="stat"><b>${pct}%</b><small>parcours</small></div></div>
-  <div class="bar"><i style="width:${nx?Math.min(100,(S.xp-r[0])/(nx[0]-r[0])*100):100}%"></i></div><small>Grade : <b>${r[1]}</b>${nx?` · prochain : ${nx[1]} à ${nx[0]} points`:""}</small></div>
-  <button class="btn sec" id="rev">Réviser mes erreurs (${S.w.length})</button>
-  <button class="btn sec" id="cs">S'entraîner devant le jury</button>
-  <button class="btn sec" id="exb">Épreuves en conditions réelles</button>
-  <button class="btn sec" id="smb">Ateliers et dilemmes</button>
+  ${S.xp?`<div class="card"><div class="row"><div class="stat"><b>${streak()}</b><small>jours de suite</small></div><div class="stat"><b>${S.xp}</b><small>points</small></div><div class="stat"><b>${pct}%</b><small>parcours</small></div></div>
+  <div class="bar"><i style="width:${nx?Math.min(100,(S.xp-r[0])/(nx[0]-r[0])*100):100}%"></i></div><small>Grade : <b>${r[1]}</b>${nx?` · prochain : ${nx[1]} à ${nx[0]} points`:""}</small></div>`:`<div class="card"><h3 style="margin-top:0">Ia ora na, bienvenue !</h3><p class="mut" style="margin:0">Une séance dure 12 à 15 minutes : une fiche courte, un petit quiz, une mise en situation. Chaque étape te rapporte des points et te fait monter en grade, de ${RANKS[0][1]} à ${RANKS[RANKS.length-1][1]}.</p></div>`}
+  <div class="tiles">
+   <button class="tile" id="rev"${S.w.length?"":" hidden"}><span>🔁</span><b>Réviser</b><small>${S.w.length} erreur${S.w.length>1?"s":""} à revoir</small></button>
+   <button class="tile" id="cs"><span>🎙️</span><b>Recruteur</b><small>Questions d'entretien</small></button>
+   <button class="tile" id="exb"><span>💼</span><b>Simulation d'embauche</b><small>Entretien et test chronométrés</small></button>
+   <button class="tile" id="smb"><span>🧮</span><b>Ateliers</b><small>Calculs et dilemmes du métier</small></button>
+  </div>
   <button class="btn" id="inst" style="display:${INST&&!standalone()?"block":"none"}">📲 Installer l'application</button>
   <div class="card warn"><h3>À savoir</h3><p class="mut">Ce parcours prépare au métier et à l'entretien d'embauche. Il ne remplace ni la formation, ni les habilitations, ni les consignes de l'employeur.</p></div>`;
   const g=document.getElementById("goDay");if(g)g.onclick=()=>go("day",l,d);
   document.getElementById("rev").onclick=()=>{const it=mix(10,L.length-1);quiz(it,"Révision",sc=>{gain("",sc);go("home")},()=>go("home"))};
   document.getElementById("cs").onclick=()=>go("conseil");document.getElementById("exb").onclick=()=>go("exam");document.getElementById("smb").onclick=simHub;document.getElementById("inst").onclick=installApp}
 function parcours(){const cur=curDay();
-  app.innerHTML=`<h1>Parcours</h1><p class="mut">${L.length} niveaux · ${NS} séances d'environ 40 minutes. À 5 séances par semaine : ${L.length} semaines ; tous les jours : environ ${Math.ceil(NS/7)}.</p>`+L.map((x,l)=>`<div class="card"><div class="lvl"><div class="num">${l+1}</div><div style="flex:1"><h3>${x.t}</h3><small>${x.s}</small><div class="days">${DAYN.map((n,d)=>{const i=l*5+d,dn=dayDone(l,d),lk=!S.free&&i>cur;return `<button class="day ${dn?"done":i===cur?"cur":lk?"lock":""}" data-l="${l}" data-d="${d}" ${lk?"disabled":""}>${dn?"✓":n}</button>`}).join("")}</div></div></div></div>`).join("");
+  app.innerHTML=`<h1>Parcours</h1><p class="mut">${L.length} niveaux · ${NS} séances courtes de 12 à 15 minutes. À 5 séances par semaine : ${L.length} semaines ; tous les jours : environ ${Math.ceil(NS/7)}.</p>`+L.map((x,l)=>`<div class="card"><div class="lvl"><div class="num">${l+1}</div><div style="flex:1"><h3>${x.t}</h3><small>${x.s}</small><div class="days">${DAYN.map((n,d)=>{const i=l*5+d,dn=dayDone(l,d),lk=!S.free&&i>cur;return `<button class="day ${dn?"done":i===cur?"cur":lk?"lock":""}" data-l="${l}" data-d="${d}" ${lk?"disabled":""}>${dn?"✓":n}</button>`}).join("")}</div></div></div></div>`).join("");
   app.querySelectorAll(".day").forEach(b=>b.onclick=()=>go("day",+b.dataset.l,+b.dataset.d))}
 function day(l,d){const P=plan(l,d);
   app.innerHTML=hdr(`Niveau ${l+1} · ${DAYN[d]}`)+`<h2>${L[l].t}</h2><p class="mut">Environ ${P.reduce((s,x)=>s+x.m,0)} minutes. Fais les étapes dans l'ordre.</p>`+P.map((p,i)=>{const k=sk(l,d,i),dn=k in S.s;return `<button class="step ${dn?"done":""}" data-i="${i}"><span class="ic">${LBL[p.k][0]}</span><span><b>${p.n||LBL[p.k][1]}</b><br><small>${p.m} min</small></span>${dn?`<span class="sc">${S.s[k]}%</span>`:""}</button>`}).join("")+(dayDone(l,d)?`<div class="card" style="text-align:center"><b>Séance validée ✓</b></div>`:"");
@@ -1364,7 +1374,7 @@ function timerBox(sec){return `<div class="timer" id="tmr">${fmt(sec)}</div><div
 const fmt=s=>(s>=3600?Math.floor(s/3600)+":"+String(Math.floor(s%3600/60)).padStart(2,"0"):Math.floor(s/60))+":"+String(s%60).padStart(2,"0");
 function bindTimer(sec){let left=sec;const el=document.getElementById("tmr"),b=document.getElementById("tgo");b.onclick=()=>{if(tm){halt();b.textContent="Reprendre";return}b.textContent="Pause";tm=setInterval(()=>{left--;el.textContent=fmt(Math.max(0,left));if(left<=0){halt();el.textContent="Temps écoulé";b.disabled=true}},1000)}}
 function oral(list,done,back){AUSRC=null;let i=0,tot=0;(function show(){const [l,k]=list[i],O=L[l].o[k],j=J[O[0]];halt();window.scrollTo(0,0);
-  app.innerHTML=hdr(`Le jury · ${i+1}/${list.length}`)+`<div class="card"><div class="jur"><div class="av" style="background:${j.c}">${j.n.split(" ").pop()[0]}</div><div><b>${j.n}</b><br><small>${j.r}</small></div></div><p class="q">« ${O[1]} »</p><p class="mut">Prends une minute pour réfléchir, puis réponds <b>à voix haute</b> pendant trois minutes, comme devant le jury.</p>${timerBox(240)}<p class="mut" style="margin-top:12px">Notes (facultatif)</p><textarea id="nt" placeholder="Mots-clés de ta réponse…"></textarea><button class="btn" id="rv">Voir ce que le jury attend</button><div id="fb"></div></div>`;
+  app.innerHTML=hdr(`Le jury · ${i+1}/${list.length}`)+`<div class="card"><div class="jur"><div class="av" style="background:${j.c}">${j.n.split(" ").pop()[0]}</div><div><b>${j.n}</b><br><small>${j.r}</small></div></div><p class="q">« ${O[1]} »</p><p class="mut">Prends une minute pour réfléchir, puis réponds <b>à voix haute</b> pendant trois minutes, comme face au recruteur.</p>${timerBox(240)}<p class="mut" style="margin-top:12px">Notes (facultatif)</p><textarea id="nt" placeholder="Mots-clés de ta réponse…"></textarea><button class="btn" id="rv">Voir ce que le recruteur attend</button><div id="fb"></div></div>`;
   bindBack(back);bindTimer(240);document.getElementById("rv").onclick=e=>{halt();e.target.remove();
     document.getElementById("fb").innerHTML=`<div class="fb"><b>Coche ce que tu as vraiment dit :</b></div>${O[2].map((x,m)=>`<label class="ck"><input type="checkbox" data-m="${m}"><span>${x}</span></label>`).join("")}<button class="btn" id="nx">Valider</button>`;
     document.getElementById("nx").onclick=()=>{tot+=app.querySelectorAll("input:checked").length/O[2].length;i++;i<list.length?show():done(Math.round(tot/list.length*100))}}})()}
@@ -1375,7 +1385,7 @@ function ecrit(l,done,back,E){AUSRC=null;E=E||L[l].e;window.scrollTo(0,0);
     document.getElementById("nx").onclick=()=>done(Math.round(app.querySelectorAll("input:checked").length/GRILLE.length*100))}}
 function fiches(){app.innerHTML=`<h1>Fiches</h1><p class="mut">Tout le cours, à relire quand tu veux.</p><button class="btn sec" id="rep">📌 Aide-mémoire : les repères à connaître</button>`+L.map((x,l)=>`<div class="card"><h3>${l+1}. ${x.t}</h3>${x.f.map((f,i)=>`<button class="opt" data-l="${l}" data-i="${i}">${f[0]}</button>`).join("")}</div>`).join("");
   app.querySelectorAll(".opt").forEach(b=>b.onclick=()=>lire(+b.dataset.l,[+b.dataset.i],()=>go("fiches"),()=>go("fiches")));document.getElementById("rep").onclick=reperes}
-function conseil(){app.innerHTML=`<h1>Le jury</h1><p class="mut">Ton jury d'entraînement (personnages fictifs). Choisis qui t'interroge, ou laisse le hasard décider.</p>`+Object.keys(J).map(k=>`<button class="step" data-k="${k}"><span class="av" style="background:${J[k].c};flex:0 0 40px;height:40px">${J[k].n.split(" ").pop()[0]}</span><span><b>${J[k].n}</b><br><small>${J[k].r}</small></span></button>`).join("")+`<button class="btn" id="all">Entretien complet : 4 questions</button>`;
+function conseil(){app.innerHTML=`<h1>Les recruteurs</h1><p class="mut">Ton panel de recruteurs d'entraînement (personnages fictifs). Choisis qui t'interroge, ou laisse le hasard décider.</p>`+Object.keys(J).map(k=>`<button class="step" data-k="${k}"><span class="av" style="background:${J[k].c};flex:0 0 40px;height:40px">${J[k].n.split(" ").pop()[0]}</span><span><b>${J[k].n}</b><br><small>${J[k].r}</small></span></button>`).join("")+`<button class="btn" id="all">Entretien complet : 4 questions</button>`;
   const pick=(k,n)=>{const p=[];L.forEach((x,l)=>x.o.forEach((o,i)=>{if(!k||o[0]===k)p.push([l,i])}));return shuf(p).slice(0,n)};
   const run=list=>oral(list,sc=>end("",sc,()=>go("conseil")),()=>go("conseil"));
   app.querySelectorAll(".step").forEach(b=>b.onclick=()=>run(pick(b.dataset.k,2)));
@@ -1384,21 +1394,21 @@ function conseil(){app.innerHTML=`<h1>Le jury</h1><p class="mut">Ton jury d'entr
 function say(t){if(!TTS)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="fr-FR";u.rate=.97;const v=speechSynthesis.getVoices().find(v=>/^fr/i.test(v.lang));if(v)u.voice=v;speechSynthesis.speak(u)}catch(e){}}
 function count(sec,el,onEnd){let left=sec;el.textContent=fmt(left);if(tm)clearInterval(tm);tm=setInterval(()=>{left--;el.textContent=fmt(Math.max(0,left));if(left<=0){clearInterval(tm);tm=null;onEnd()}},1000)}
 function note20(title,n,back){S.ex.unshift([today(),title,n]);S.ex=S.ex.slice(0,30);end("",Math.round(n*5),back)}
-function exam(){app.innerHTML=`<h1>Conditions réelles</h1><p class="mut">Chrono sans pause, aucune correction avant la fin.</p>
+function exam(){app.innerHTML=`<h1>Simulation d'embauche</h1><p class="mut">Chrono sans pause, aucune correction avant la fin.</p>
   <button class="step" id="e1"><span class="ic">🎙️</span><span><b>Entretien d'embauche en maintenance</b><br><small>20 min : 5 min de présentation, puis questions et relances</small></span></button>
-  <button class="step" id="e4"><span class="ic">✅</span><span><b>QCM de connaissances</b><br><small>30 questions en 20 min, correction à la fin</small></span></button>
+  <button class="step" id="e4"><span class="ic">✅</span><span><b>Test de connaissances</b><br><small>30 questions en 20 min, correction à la fin</small></span></button>
   <button class="btn sec" id="e6">Ateliers et dilemmes</button>
-  <button class="btn sec" id="e5">Entraînement libre devant le jury</button>
-  <div class="card"><h3>Mes résultats</h3>${S.ex.length?S.ex.map(x=>`<p style="display:flex;justify-content:space-between"><span>${x[0]} · ${x[1]}</span><b>${x[2]}/20</b></p>`).join(""):`<p class="mut">Aucune épreuve passée pour l'instant.</p>`}</div>
+  <button class="btn sec" id="e5">Entraînement libre avec le recruteur</button>
+  <div class="card"><h3>Mes résultats</h3>${S.ex.length?S.ex.map(x=>`<p style="display:flex;justify-content:space-between"><span>${x[0]} · ${x[1]}</span><b>${x[2]}/20</b></p>`).join(""):`<p class="mut">Aucune simulation passée pour l'instant.</p>`}</div>
   <div class="card warn"><h3>Ce que le jeu ne remplace pas</h3><p class="mut">Seule une habilitation électrique t'autorise à intervenir : cette application ne la remplace pas.</p></div>`;
   const pool=()=>{const p=X.slice();L.forEach(x=>x.o.forEach(o=>p.push(o)));return p};
   document.getElementById("e1").onclick=()=>examOral({t:"Entretien maintenance",expo:5,total:20,pool});
   document.getElementById("e4").onclick=examQCM;document.getElementById("e5").onclick=()=>go("conseil");document.getElementById("e6").onclick=simHub}
 function examOral(o){AUSRC=null;const back=()=>go("exam"),asked=[];
-  app.innerHTML=hdr(o.t)+`<div class="card fiche"><h2 style="margin-top:0">Déroulement</h2><ul><li><b>${o.expo} minutes</b> d'exposé : ton parcours et ton projet. À la fin du temps, le jury te coupe.</li><li>Puis des questions jusqu'à <b>${o.total} minutes</b> au total, sans préparation, avec des relances.</li><li>Réponds <b>à voix haute</b>. Tu ne verras les attendus qu'au débriefing.</li><li>Aucune pause. Quitter l'écran annule l'épreuve.</li></ul><label class="ck" style="border:0"><input type="checkbox" id="vx" ${TTS?"checked":"disabled"}><span>Le jury pose ses questions à voix haute${TTS?"":" (indisponible sur cet appareil)"}</span></label><button class="btn" id="st">Entrer dans la salle</button></div>`;
+  app.innerHTML=hdr(o.t)+`<div class="card fiche"><h2 style="margin-top:0">Déroulement</h2><ul><li><b>${o.expo} minutes</b> d'exposé : ton parcours et ton projet. À la fin du temps, le recruteur te coupe.</li><li>Puis des questions jusqu'à <b>${o.total} minutes</b> au total, sans préparation, avec des relances.</li><li>Réponds <b>à voix haute</b>. Tu ne verras les attendus qu'au débriefing.</li><li>Aucune pause. Quitter l'écran annule l'épreuve.</li></ul><label class="ck" style="border:0"><input type="checkbox" id="vx" ${TTS?"checked":"disabled"}><span>Le recruteur pose ses questions à voix haute${TTS?"":" (indisponible sur cet appareil)"}</span></label><button class="btn" id="st">Entrer dans la salle</button></div>`;
   bindBack(back);document.getElementById("st").onclick=()=>p1(document.getElementById("vx").checked);
   function p1(voice){const line=`Bonjour. Installez-vous. Vous avez ${o.expo} minutes pour vous présenter, nous vous écoutons.`,t0=Date.now();window.scrollTo(0,0);
-    app.innerHTML=`<div class="card"><span class="tag">Exposé</span><p class="q">« ${line} »</p><div class="timer" id="tmr"></div><p class="mut">Regarde l'écran comme tu regarderais le jury. Ne lis pas tes notes.</p><button class="btn" id="nx">J'ai terminé mon exposé</button></div>`;
+    app.innerHTML=`<div class="card"><span class="tag">Exposé</span><p class="q">« ${line} »</p><div class="timer" id="tmr"></div><p class="mut">Regarde l'écran comme tu regarderais le recruteur. Ne lis pas tes notes.</p><button class="btn" id="nx">J'ai terminé mon exposé</button></div>`;
     if(voice)say(line);const nx=cut=>{clearInterval(tm);tm=null;p2(voice,cut,Math.round((Date.now()-t0)/1000))};
     count(o.expo*60,document.getElementById("tmr"),()=>nx(true));document.getElementById("nx").onclick=()=>nx(false)}
   function p2(voice,cut,used){const qs=shuf(o.pool()).slice(0,16);let i=-1,rel=false,over=false;window.scrollTo(0,0);
@@ -1408,8 +1418,8 @@ function examOral(o){AUSRC=null;const back=()=>go("exam"),asked=[];
     const put=(q,txt,pre)=>{const j=J[q[0]];document.getElementById("qz").innerHTML=`<div class="jur"><div class="av" style="background:${j.c}">${j.n.split(" ").pop()[0]}</div><div><b>${j.n}</b><br><small>${j.r}</small></div></div><p class="q">« ${pre||""}${txt} »</p>`;if(voice)say((pre||"")+txt)};
     const nxt=()=>{if(!rel&&i>=0&&Math.random()<.35){rel=true;put(qs[i],RELANCES[Math.floor(Math.random()*RELANCES.length)])}else{rel=false;i++;if(i>=qs.length)return fin();asked.push(qs[i]);put(qs[i],qs[i][1],i===0&&cut?"Je vous interromps, le temps de l'exposé est écoulé. ":"")}};
     document.getElementById("nx").onclick=nxt;nxt()}
-  function debrief(cut,used){const tgt=o.expo*60,msg=cut?"interrompu par le jury : exposé trop long ou mal minuté":used<tgt*.6?"nettement trop court : tu laisses du temps aux questions difficiles":"durée correcte";window.scrollTo(0,0);
-    app.innerHTML=hdr("Débriefing")+`<div class="card"><p><b>Exposé : ${fmt(used)}</b> sur ${o.expo}:00, ${msg}.</p><p><b>${asked.length} questions</b> traitées. Ouvre chacune et compare avec ce que tu as réellement dit.</p></div>`+asked.map(q=>`<details class="card"><summary><b>${J[q[0]].n} :</b> ${q[1]}</summary><ul>${q[2].map(k=>`<li>${k}</li>`).join("")}</ul></details>`).join("")+`<div class="card"><h3>Grille du jury</h3><p class="mut">Note-toi comme un jury le ferait : 0 = absent, 2 = moyen, 4 = excellent.</p>${CRIT.map(c=>`<label class="ck"><span style="flex:1">${c}</span><select>${[0,1,2,3,4].map(n=>`<option ${n===2?"selected":""}>${n}</option>`).join("")}</select></label>`).join("")}<button class="btn" id="ok">Calculer ma note</button></div>`;
+  function debrief(cut,used){const tgt=o.expo*60,msg=cut?"interrompu par le recruteur : exposé trop long ou mal minuté":used<tgt*.6?"nettement trop court : tu laisses du temps aux questions difficiles":"durée correcte";window.scrollTo(0,0);
+    app.innerHTML=hdr("Débriefing")+`<div class="card"><p><b>Exposé : ${fmt(used)}</b> sur ${o.expo}:00, ${msg}.</p><p><b>${asked.length} questions</b> traitées. Ouvre chacune et compare avec ce que tu as réellement dit.</p></div>`+asked.map(q=>`<details class="card"><summary><b>${J[q[0]].n} :</b> ${q[1]}</summary><ul>${q[2].map(k=>`<li>${k}</li>`).join("")}</ul></details>`).join("")+`<div class="card"><h3>Grille du recruteur</h3><p class="mut">Note-toi comme un recruteur le ferait : 0 = absent, 2 = moyen, 4 = excellent.</p>${CRIT.map(c=>`<label class="ck"><span style="flex:1">${c}</span><select>${[0,1,2,3,4].map(n=>`<option ${n===2?"selected":""}>${n}</option>`).join("")}</select></label>`).join("")}<button class="btn" id="ok">Calculer ma note</button></div>`;
     bindBack(back);document.getElementById("ok").onclick=()=>{let n=0;app.querySelectorAll("select").forEach(x=>n+=+x.value);note20(o.t,n,back)}}}
 function examQCM(){AUSRC=null;const back=()=>go("exam"),pool=[];L.forEach((x,l)=>x.q.forEach((_,k)=>pool.push([l,k])));const items=shuf(pool).slice(0,30),res=[];let i=0,over=false;
   app.innerHTML=hdr("QCM · 30 questions")+`<div class="timer" id="tmr"></div><div id="qz"></div>`;bindBack(back);
@@ -1457,7 +1467,7 @@ function simHub(){const back=()=>go("exam");
   document.getElementById("dl").onclick=()=>dilem(sc=>end("dil",sc,simHub),simHub)}
 
 /* ===================== INSTALLATION ET MISE À JOUR ===================== */
-const APP_V="2026.11.16.2";let INST=null,SWR=null;
+const APP_V="2026.11.17.1";let INST=null,SWR=null;
 const standalone=()=>{try{return matchMedia("(display-mode: standalone)").matches||navigator.standalone===true}catch(e){return false}};
 try{window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();INST=e;const b=document.getElementById("inst");if(b)b.style.display="block"})}catch(e){}
 try{if("serviceWorker" in navigator&&location.protocol==="https:"&&!/claude\.ai|claudeusercontent/.test(location.host))navigator.serviceWorker.register("sw.js").then(r=>{SWR=r;r.addEventListener("updatefound",()=>{const w=r.installing;if(w)w.addEventListener("statechange",()=>{if(w.state==="installed"&&navigator.serviceWorker.controller)toast("Nouvelle version disponible : Profil → Mettre à jour.")})})}).catch(()=>{})}catch(e){}
@@ -1503,7 +1513,7 @@ window.addEventListener("hashchange",()=>{const h=location.hash.slice(1);if(["ho
 
 window.__CF={L:L,AT:typeof AT!=="undefined"?AT:null,open:(l,i)=>lire(l,[i],()=>go("fiches"),()=>go("fiches"))};
 }}));
-TRACKS.push(Object.assign({"id": "cpt", "key": "ohipa-cpt-v1", "ic": "🧾", "name": "Comptabilité", "sub": "Pièces, partie double, TVA du fenua, banque, facture", "col": ["#1d6f42", "#dff0e5", "#7fd3a0", "#1b4630"]},{run:function(){
+TRACKS.push(Object.assign({"id": "cpt", "key": "ohipa-cpt-v1", "ic": "🧾", "name": "Comptabilité", "sub": "Pièces, partie double, TVA du fenua, banque, facture", "col": ["#1d6f42", "#dff0e5", "#7fd3a0", "#1b4630"], "hint": "Utile dans toutes les entreprises", "ranks": ["Débutant", "Aide-comptable", "Comptable junior", "Comptable", "Comptable confirmé", "Chef comptable", "Responsable financier"]},{run:function(){
 "use strict";
 const J={"EXP": {"n": "Mme Tiare", "r": "Expert-comptable", "c": "#2f4f8f"}, "GES": {"n": "M. Teiki", "r": "Gérant de PME", "c": "#0f6e78"}, "BAN": {"n": "Mme Mareva", "r": "Chargée de clientèle bancaire", "c": "#b8402a"}, "FIS": {"n": "M. Ariitai", "r": "Agent des impôts", "c": "#2c8a57"}};
 const GRILLE=["Vocabulaire exact", "Calcul juste", "Pièce justificative citée", "Respect des délais", "Exemple concret", "Relecture"];
@@ -1557,14 +1567,14 @@ function mix(n,l){ // révision : erreurs d'abord, puis tirage dans les niveaux 
   const pool=[];for(let i=0;i<=l;i++)L[i].q.forEach((_,k)=>pool.push(i+"."+k));
   const w=shuf(S.w.filter(k=>pool.includes(k))),rest=shuf(pool.filter(k=>!w.includes(k)));
   return w.concat(rest).slice(0,n).map(k=>k.split(".").map(Number));}
-function plan(l,d){const Q=a=>a.map(k=>[l,k]),m=SIMMAP[l],sn=m==="dil"?"Dilemmes du comptable":"Atelier : "+AT[+m.slice(2)].t;
+function plan(l,d){const Q=a=>a.map(k=>[l,k]),m=SIMMAP[l],sn=m==="dil"?"Dilemme du métier":"Atelier : "+AT[+m.slice(2)].t;
   return [
-  [{k:"lire",f:[0,1],m:12},{k:"quiz",q:()=>Q(rng(0,6)),m:10},{k:"sim",m:15,n:sn}],
-  [{k:"lire",f:[2,3],m:12},{k:"quiz",q:()=>Q(rng(6,12)),m:10},{k:"cas",c:[0],m:8}],
-  [{k:"oral",o:[0],m:10},{k:"cas",c:[1],m:8},{k:"quiz",q:()=>mix(8,l),m:10,n:"Révision"}],
-  [{k:"oral",o:[1],m:10},{k:"lire",f:[0,1,2,3],m:12,n:"Relecture des fiches"},{k:"quiz",q:()=>mix(10,l),m:12,n:"Révision ciblée"}],
-  [{k:"quiz",q:()=>shuf(Q(rng(0,12))),m:15,n:"Épreuve du niveau"},{k:"ecrit",m:30}]][d];}
-const LBL={sim:["🧩","Simulation"],lire:["📖","Fiches à lire"],quiz:["✅","Quiz"],cas:["🧭","Mise en situation"],oral:["🎙️","Devant le jury"],ecrit:["✍️","Cas écrit"]};
+  [{k:"lire",f:[0],m:4},{k:"quiz",q:()=>Q(rng(0,6)),m:5},{k:"cas",c:[0],m:4}],
+  [{k:"lire",f:[1],m:4},{k:"quiz",q:()=>Q(rng(6,12)),m:5},{k:"sim",m:6,n:sn}],
+  [{k:"lire",f:[2],m:4},{k:"cas",c:[1],m:4},{k:"quiz",q:()=>mix(6,l),m:4,n:"Révision"}],
+  [{k:"lire",f:[3],m:4},{k:"oral",o:[0],m:5},{k:"quiz",q:()=>mix(6,l),m:4,n:"Révision ciblée"}],
+  [{k:"oral",o:[1],m:5},{k:"quiz",q:()=>shuf(Q(rng(0,12))),m:8,n:"Défi du niveau"}]][d];}
+const LBL={sim:["🧩","Simulation"],lire:["📖","Fiches à lire"],quiz:["✅","Quiz"],cas:["🧭","Mise en situation"],oral:["🎙️","Face au recruteur"],ecrit:["✍️","Cas écrit"]};
 const sk=(l,d,i)=>l+"."+d+"."+i;
 const dayDone=(l,d)=>plan(l,d).every((_,i)=>sk(l,d,i) in S.s);
 function curDay(){for(let n=0;n<NS;n++){const l=Math.floor(n/5),d=n%5;if(!dayDone(l,d))return n}return NS}
@@ -1596,7 +1606,7 @@ function readOut(btn){
   btn.textContent="⏹ Arrêter"}catch(e){}}
 function hdr(title,back){return `<div class="top"><button class="back" id="bk">←</button><b>${title}</b><button class="au" id="au">🔊 Écouter</button></div>`}
 function bindBack(fn){const b=document.getElementById("bk");if(b)b.onclick=()=>{halt();fn()};const a=document.getElementById("au");if(a)a.onclick=()=>readOut(a)}
-function setNav(v){const it=[["home","🏝️","Accueil"],["parcours","🗺️","Parcours"],["fiches","📚","Fiches"],["exam","⏱️","Examens"],["profil","👤","Profil"]];
+function setNav(v){const it=[["home","🏝️","Accueil"],["parcours","🗺️","Parcours"],["fiches","📚","Fiches"],["exam","⏱️","Entretien"],["profil","👤","Profil"]];
   nav.innerHTML=it.map(x=>`<button class="${x[0]===v?"on":""}" data-v="${x[0]}"><span>${x[1]}</span>${x[2]}</button>`).join("");
   nav.querySelectorAll("button").forEach(b=>b.onclick=()=>go(b.dataset.v))}
 function go(v,a,b){halt();AUSRC=null;window.scrollTo(0,0);setNav(v);({home,parcours,fiches,conseil,profil,day,exam})[v](a,b);try{if(v!=="day")location.hash=v}catch(e){}}
@@ -1605,19 +1615,21 @@ function go(v,a,b){halt();AUSRC=null;window.scrollTo(0,0);setNav(v);({home,parco
 function home(){const n=curDay(),l=Math.floor(n/5),d=n%5,{r,nx}=rank(),pct=Math.round(n/NS*100);
   app.innerHTML=`<div class="band"></div><button class="chg" id="chg">⇄ Voies</button><h1>Comptabilité</h1><p class="mut">Pièces, partie double, TVA du fenua, banque, facture</p>
   <div class="card hero">${n<NS?`<small>Séance ${n+1} sur ${NS} · Niveau ${l+1}</small><h2 style="margin:4px 0">${L[l].t}</h2><small>${DAYN[d]} · environ ${plan(l,d).reduce((s,x)=>s+x.m,0)} min</small><button class="btn wh" id="goDay">Commencer la séance</button>`:`<h2 style="margin:4px 0">Parcours terminé 🎉</h2><small>Continue avec les révisions, les ateliers et les entretiens.</small>`}</div>
-  <div class="card"><div class="row"><div class="stat"><b>${streak()}</b><small>jours de suite</small></div><div class="stat"><b>${S.xp}</b><small>points</small></div><div class="stat"><b>${pct}%</b><small>parcours</small></div></div>
-  <div class="bar"><i style="width:${nx?Math.min(100,(S.xp-r[0])/(nx[0]-r[0])*100):100}%"></i></div><small>Grade : <b>${r[1]}</b>${nx?` · prochain : ${nx[1]} à ${nx[0]} points`:""}</small></div>
-  <button class="btn sec" id="rev">Réviser mes erreurs (${S.w.length})</button>
-  <button class="btn sec" id="cs">S'entraîner devant le jury</button>
-  <button class="btn sec" id="exb">Épreuves en conditions réelles</button>
-  <button class="btn sec" id="smb">Ateliers et dilemmes</button>
+  ${S.xp?`<div class="card"><div class="row"><div class="stat"><b>${streak()}</b><small>jours de suite</small></div><div class="stat"><b>${S.xp}</b><small>points</small></div><div class="stat"><b>${pct}%</b><small>parcours</small></div></div>
+  <div class="bar"><i style="width:${nx?Math.min(100,(S.xp-r[0])/(nx[0]-r[0])*100):100}%"></i></div><small>Grade : <b>${r[1]}</b>${nx?` · prochain : ${nx[1]} à ${nx[0]} points`:""}</small></div>`:`<div class="card"><h3 style="margin-top:0">Ia ora na, bienvenue !</h3><p class="mut" style="margin:0">Une séance dure 12 à 15 minutes : une fiche courte, un petit quiz, une mise en situation. Chaque étape te rapporte des points et te fait monter en grade, de ${RANKS[0][1]} à ${RANKS[RANKS.length-1][1]}.</p></div>`}
+  <div class="tiles">
+   <button class="tile" id="rev"${S.w.length?"":" hidden"}><span>🔁</span><b>Réviser</b><small>${S.w.length} erreur${S.w.length>1?"s":""} à revoir</small></button>
+   <button class="tile" id="cs"><span>🎙️</span><b>Recruteur</b><small>Questions d'entretien</small></button>
+   <button class="tile" id="exb"><span>💼</span><b>Simulation d'embauche</b><small>Entretien et test chronométrés</small></button>
+   <button class="tile" id="smb"><span>🧮</span><b>Ateliers</b><small>Calculs et dilemmes du métier</small></button>
+  </div>
   <button class="btn" id="inst" style="display:${INST&&!standalone()?"block":"none"}">📲 Installer l'application</button>
   <div class="card warn"><h3>À savoir</h3><p class="mut">Ce parcours prépare au métier et à l'entretien d'embauche. Il ne remplace ni la formation, ni les habilitations, ni les consignes de l'employeur.</p></div>`;
   const g=document.getElementById("goDay");if(g)g.onclick=()=>go("day",l,d);
   document.getElementById("rev").onclick=()=>{const it=mix(10,L.length-1);quiz(it,"Révision",sc=>{gain("",sc);go("home")},()=>go("home"))};
   document.getElementById("cs").onclick=()=>go("conseil");document.getElementById("exb").onclick=()=>go("exam");document.getElementById("smb").onclick=simHub;document.getElementById("inst").onclick=installApp}
 function parcours(){const cur=curDay();
-  app.innerHTML=`<h1>Parcours</h1><p class="mut">${L.length} niveaux · ${NS} séances d'environ 40 minutes. À 5 séances par semaine : ${L.length} semaines ; tous les jours : environ ${Math.ceil(NS/7)}.</p>`+L.map((x,l)=>`<div class="card"><div class="lvl"><div class="num">${l+1}</div><div style="flex:1"><h3>${x.t}</h3><small>${x.s}</small><div class="days">${DAYN.map((n,d)=>{const i=l*5+d,dn=dayDone(l,d),lk=!S.free&&i>cur;return `<button class="day ${dn?"done":i===cur?"cur":lk?"lock":""}" data-l="${l}" data-d="${d}" ${lk?"disabled":""}>${dn?"✓":n}</button>`}).join("")}</div></div></div></div>`).join("");
+  app.innerHTML=`<h1>Parcours</h1><p class="mut">${L.length} niveaux · ${NS} séances courtes de 12 à 15 minutes. À 5 séances par semaine : ${L.length} semaines ; tous les jours : environ ${Math.ceil(NS/7)}.</p>`+L.map((x,l)=>`<div class="card"><div class="lvl"><div class="num">${l+1}</div><div style="flex:1"><h3>${x.t}</h3><small>${x.s}</small><div class="days">${DAYN.map((n,d)=>{const i=l*5+d,dn=dayDone(l,d),lk=!S.free&&i>cur;return `<button class="day ${dn?"done":i===cur?"cur":lk?"lock":""}" data-l="${l}" data-d="${d}" ${lk?"disabled":""}>${dn?"✓":n}</button>`}).join("")}</div></div></div></div>`).join("");
   app.querySelectorAll(".day").forEach(b=>b.onclick=()=>go("day",+b.dataset.l,+b.dataset.d))}
 function day(l,d){const P=plan(l,d);
   app.innerHTML=hdr(`Niveau ${l+1} · ${DAYN[d]}`)+`<h2>${L[l].t}</h2><p class="mut">Environ ${P.reduce((s,x)=>s+x.m,0)} minutes. Fais les étapes dans l'ordre.</p>`+P.map((p,i)=>{const k=sk(l,d,i),dn=k in S.s;return `<button class="step ${dn?"done":""}" data-i="${i}"><span class="ic">${LBL[p.k][0]}</span><span><b>${p.n||LBL[p.k][1]}</b><br><small>${p.m} min</small></span>${dn?`<span class="sc">${S.s[k]}%</span>`:""}</button>`}).join("")+(dayDone(l,d)?`<div class="card" style="text-align:center"><b>Séance validée ✓</b></div>`:"");
@@ -1649,7 +1661,7 @@ function timerBox(sec){return `<div class="timer" id="tmr">${fmt(sec)}</div><div
 const fmt=s=>(s>=3600?Math.floor(s/3600)+":"+String(Math.floor(s%3600/60)).padStart(2,"0"):Math.floor(s/60))+":"+String(s%60).padStart(2,"0");
 function bindTimer(sec){let left=sec;const el=document.getElementById("tmr"),b=document.getElementById("tgo");b.onclick=()=>{if(tm){halt();b.textContent="Reprendre";return}b.textContent="Pause";tm=setInterval(()=>{left--;el.textContent=fmt(Math.max(0,left));if(left<=0){halt();el.textContent="Temps écoulé";b.disabled=true}},1000)}}
 function oral(list,done,back){AUSRC=null;let i=0,tot=0;(function show(){const [l,k]=list[i],O=L[l].o[k],j=J[O[0]];halt();window.scrollTo(0,0);
-  app.innerHTML=hdr(`Le jury · ${i+1}/${list.length}`)+`<div class="card"><div class="jur"><div class="av" style="background:${j.c}">${j.n.split(" ").pop()[0]}</div><div><b>${j.n}</b><br><small>${j.r}</small></div></div><p class="q">« ${O[1]} »</p><p class="mut">Prends une minute pour réfléchir, puis réponds <b>à voix haute</b> pendant trois minutes, comme devant le jury.</p>${timerBox(240)}<p class="mut" style="margin-top:12px">Notes (facultatif)</p><textarea id="nt" placeholder="Mots-clés de ta réponse…"></textarea><button class="btn" id="rv">Voir ce que le jury attend</button><div id="fb"></div></div>`;
+  app.innerHTML=hdr(`Le jury · ${i+1}/${list.length}`)+`<div class="card"><div class="jur"><div class="av" style="background:${j.c}">${j.n.split(" ").pop()[0]}</div><div><b>${j.n}</b><br><small>${j.r}</small></div></div><p class="q">« ${O[1]} »</p><p class="mut">Prends une minute pour réfléchir, puis réponds <b>à voix haute</b> pendant trois minutes, comme face au recruteur.</p>${timerBox(240)}<p class="mut" style="margin-top:12px">Notes (facultatif)</p><textarea id="nt" placeholder="Mots-clés de ta réponse…"></textarea><button class="btn" id="rv">Voir ce que le recruteur attend</button><div id="fb"></div></div>`;
   bindBack(back);bindTimer(240);document.getElementById("rv").onclick=e=>{halt();e.target.remove();
     document.getElementById("fb").innerHTML=`<div class="fb"><b>Coche ce que tu as vraiment dit :</b></div>${O[2].map((x,m)=>`<label class="ck"><input type="checkbox" data-m="${m}"><span>${x}</span></label>`).join("")}<button class="btn" id="nx">Valider</button>`;
     document.getElementById("nx").onclick=()=>{tot+=app.querySelectorAll("input:checked").length/O[2].length;i++;i<list.length?show():done(Math.round(tot/list.length*100))}}})()}
@@ -1660,7 +1672,7 @@ function ecrit(l,done,back,E){AUSRC=null;E=E||L[l].e;window.scrollTo(0,0);
     document.getElementById("nx").onclick=()=>done(Math.round(app.querySelectorAll("input:checked").length/GRILLE.length*100))}}
 function fiches(){app.innerHTML=`<h1>Fiches</h1><p class="mut">Tout le cours, à relire quand tu veux.</p><button class="btn sec" id="rep">📌 Aide-mémoire : les repères à connaître</button>`+L.map((x,l)=>`<div class="card"><h3>${l+1}. ${x.t}</h3>${x.f.map((f,i)=>`<button class="opt" data-l="${l}" data-i="${i}">${f[0]}</button>`).join("")}</div>`).join("");
   app.querySelectorAll(".opt").forEach(b=>b.onclick=()=>lire(+b.dataset.l,[+b.dataset.i],()=>go("fiches"),()=>go("fiches")));document.getElementById("rep").onclick=reperes}
-function conseil(){app.innerHTML=`<h1>Le jury</h1><p class="mut">Ton jury d'entraînement (personnages fictifs). Choisis qui t'interroge, ou laisse le hasard décider.</p>`+Object.keys(J).map(k=>`<button class="step" data-k="${k}"><span class="av" style="background:${J[k].c};flex:0 0 40px;height:40px">${J[k].n.split(" ").pop()[0]}</span><span><b>${J[k].n}</b><br><small>${J[k].r}</small></span></button>`).join("")+`<button class="btn" id="all">Entretien complet : 4 questions</button>`;
+function conseil(){app.innerHTML=`<h1>Les recruteurs</h1><p class="mut">Ton panel de recruteurs d'entraînement (personnages fictifs). Choisis qui t'interroge, ou laisse le hasard décider.</p>`+Object.keys(J).map(k=>`<button class="step" data-k="${k}"><span class="av" style="background:${J[k].c};flex:0 0 40px;height:40px">${J[k].n.split(" ").pop()[0]}</span><span><b>${J[k].n}</b><br><small>${J[k].r}</small></span></button>`).join("")+`<button class="btn" id="all">Entretien complet : 4 questions</button>`;
   const pick=(k,n)=>{const p=[];L.forEach((x,l)=>x.o.forEach((o,i)=>{if(!k||o[0]===k)p.push([l,i])}));return shuf(p).slice(0,n)};
   const run=list=>oral(list,sc=>end("",sc,()=>go("conseil")),()=>go("conseil"));
   app.querySelectorAll(".step").forEach(b=>b.onclick=()=>run(pick(b.dataset.k,2)));
@@ -1669,21 +1681,21 @@ function conseil(){app.innerHTML=`<h1>Le jury</h1><p class="mut">Ton jury d'entr
 function say(t){if(!TTS)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="fr-FR";u.rate=.97;const v=speechSynthesis.getVoices().find(v=>/^fr/i.test(v.lang));if(v)u.voice=v;speechSynthesis.speak(u)}catch(e){}}
 function count(sec,el,onEnd){let left=sec;el.textContent=fmt(left);if(tm)clearInterval(tm);tm=setInterval(()=>{left--;el.textContent=fmt(Math.max(0,left));if(left<=0){clearInterval(tm);tm=null;onEnd()}},1000)}
 function note20(title,n,back){S.ex.unshift([today(),title,n]);S.ex=S.ex.slice(0,30);end("",Math.round(n*5),back)}
-function exam(){app.innerHTML=`<h1>Conditions réelles</h1><p class="mut">Chrono sans pause, aucune correction avant la fin.</p>
+function exam(){app.innerHTML=`<h1>Simulation d'embauche</h1><p class="mut">Chrono sans pause, aucune correction avant la fin.</p>
   <button class="step" id="e1"><span class="ic">🎙️</span><span><b>Entretien d'embauche en comptabilité</b><br><small>20 min : 5 min de présentation, puis questions et relances</small></span></button>
-  <button class="step" id="e4"><span class="ic">✅</span><span><b>QCM de connaissances</b><br><small>30 questions en 20 min, correction à la fin</small></span></button>
+  <button class="step" id="e4"><span class="ic">✅</span><span><b>Test de connaissances</b><br><small>30 questions en 20 min, correction à la fin</small></span></button>
   <button class="btn sec" id="e6">Ateliers et dilemmes</button>
-  <button class="btn sec" id="e5">Entraînement libre devant le jury</button>
-  <div class="card"><h3>Mes résultats</h3>${S.ex.length?S.ex.map(x=>`<p style="display:flex;justify-content:space-between"><span>${x[0]} · ${x[1]}</span><b>${x[2]}/20</b></p>`).join(""):`<p class="mut">Aucune épreuve passée pour l'instant.</p>`}</div>
+  <button class="btn sec" id="e5">Entraînement libre avec le recruteur</button>
+  <div class="card"><h3>Mes résultats</h3>${S.ex.length?S.ex.map(x=>`<p style="display:flex;justify-content:space-between"><span>${x[0]} · ${x[1]}</span><b>${x[2]}/20</b></p>`).join(""):`<p class="mut">Aucune simulation passée pour l'instant.</p>`}</div>
   <div class="card warn"><h3>Ce que le jeu ne remplace pas</h3><p class="mut">Taux et règles fiscales évoluent : vérifie-les auprès de la DICP.</p></div>`;
   const pool=()=>{const p=X.slice();L.forEach(x=>x.o.forEach(o=>p.push(o)));return p};
   document.getElementById("e1").onclick=()=>examOral({t:"Entretien comptabilité",expo:5,total:20,pool});
   document.getElementById("e4").onclick=examQCM;document.getElementById("e5").onclick=()=>go("conseil");document.getElementById("e6").onclick=simHub}
 function examOral(o){AUSRC=null;const back=()=>go("exam"),asked=[];
-  app.innerHTML=hdr(o.t)+`<div class="card fiche"><h2 style="margin-top:0">Déroulement</h2><ul><li><b>${o.expo} minutes</b> d'exposé : ton parcours et ton projet. À la fin du temps, le jury te coupe.</li><li>Puis des questions jusqu'à <b>${o.total} minutes</b> au total, sans préparation, avec des relances.</li><li>Réponds <b>à voix haute</b>. Tu ne verras les attendus qu'au débriefing.</li><li>Aucune pause. Quitter l'écran annule l'épreuve.</li></ul><label class="ck" style="border:0"><input type="checkbox" id="vx" ${TTS?"checked":"disabled"}><span>Le jury pose ses questions à voix haute${TTS?"":" (indisponible sur cet appareil)"}</span></label><button class="btn" id="st">Entrer dans la salle</button></div>`;
+  app.innerHTML=hdr(o.t)+`<div class="card fiche"><h2 style="margin-top:0">Déroulement</h2><ul><li><b>${o.expo} minutes</b> d'exposé : ton parcours et ton projet. À la fin du temps, le recruteur te coupe.</li><li>Puis des questions jusqu'à <b>${o.total} minutes</b> au total, sans préparation, avec des relances.</li><li>Réponds <b>à voix haute</b>. Tu ne verras les attendus qu'au débriefing.</li><li>Aucune pause. Quitter l'écran annule l'épreuve.</li></ul><label class="ck" style="border:0"><input type="checkbox" id="vx" ${TTS?"checked":"disabled"}><span>Le recruteur pose ses questions à voix haute${TTS?"":" (indisponible sur cet appareil)"}</span></label><button class="btn" id="st">Entrer dans la salle</button></div>`;
   bindBack(back);document.getElementById("st").onclick=()=>p1(document.getElementById("vx").checked);
   function p1(voice){const line=`Bonjour. Installez-vous. Vous avez ${o.expo} minutes pour vous présenter, nous vous écoutons.`,t0=Date.now();window.scrollTo(0,0);
-    app.innerHTML=`<div class="card"><span class="tag">Exposé</span><p class="q">« ${line} »</p><div class="timer" id="tmr"></div><p class="mut">Regarde l'écran comme tu regarderais le jury. Ne lis pas tes notes.</p><button class="btn" id="nx">J'ai terminé mon exposé</button></div>`;
+    app.innerHTML=`<div class="card"><span class="tag">Exposé</span><p class="q">« ${line} »</p><div class="timer" id="tmr"></div><p class="mut">Regarde l'écran comme tu regarderais le recruteur. Ne lis pas tes notes.</p><button class="btn" id="nx">J'ai terminé mon exposé</button></div>`;
     if(voice)say(line);const nx=cut=>{clearInterval(tm);tm=null;p2(voice,cut,Math.round((Date.now()-t0)/1000))};
     count(o.expo*60,document.getElementById("tmr"),()=>nx(true));document.getElementById("nx").onclick=()=>nx(false)}
   function p2(voice,cut,used){const qs=shuf(o.pool()).slice(0,16);let i=-1,rel=false,over=false;window.scrollTo(0,0);
@@ -1693,8 +1705,8 @@ function examOral(o){AUSRC=null;const back=()=>go("exam"),asked=[];
     const put=(q,txt,pre)=>{const j=J[q[0]];document.getElementById("qz").innerHTML=`<div class="jur"><div class="av" style="background:${j.c}">${j.n.split(" ").pop()[0]}</div><div><b>${j.n}</b><br><small>${j.r}</small></div></div><p class="q">« ${pre||""}${txt} »</p>`;if(voice)say((pre||"")+txt)};
     const nxt=()=>{if(!rel&&i>=0&&Math.random()<.35){rel=true;put(qs[i],RELANCES[Math.floor(Math.random()*RELANCES.length)])}else{rel=false;i++;if(i>=qs.length)return fin();asked.push(qs[i]);put(qs[i],qs[i][1],i===0&&cut?"Je vous interromps, le temps de l'exposé est écoulé. ":"")}};
     document.getElementById("nx").onclick=nxt;nxt()}
-  function debrief(cut,used){const tgt=o.expo*60,msg=cut?"interrompu par le jury : exposé trop long ou mal minuté":used<tgt*.6?"nettement trop court : tu laisses du temps aux questions difficiles":"durée correcte";window.scrollTo(0,0);
-    app.innerHTML=hdr("Débriefing")+`<div class="card"><p><b>Exposé : ${fmt(used)}</b> sur ${o.expo}:00, ${msg}.</p><p><b>${asked.length} questions</b> traitées. Ouvre chacune et compare avec ce que tu as réellement dit.</p></div>`+asked.map(q=>`<details class="card"><summary><b>${J[q[0]].n} :</b> ${q[1]}</summary><ul>${q[2].map(k=>`<li>${k}</li>`).join("")}</ul></details>`).join("")+`<div class="card"><h3>Grille du jury</h3><p class="mut">Note-toi comme un jury le ferait : 0 = absent, 2 = moyen, 4 = excellent.</p>${CRIT.map(c=>`<label class="ck"><span style="flex:1">${c}</span><select>${[0,1,2,3,4].map(n=>`<option ${n===2?"selected":""}>${n}</option>`).join("")}</select></label>`).join("")}<button class="btn" id="ok">Calculer ma note</button></div>`;
+  function debrief(cut,used){const tgt=o.expo*60,msg=cut?"interrompu par le recruteur : exposé trop long ou mal minuté":used<tgt*.6?"nettement trop court : tu laisses du temps aux questions difficiles":"durée correcte";window.scrollTo(0,0);
+    app.innerHTML=hdr("Débriefing")+`<div class="card"><p><b>Exposé : ${fmt(used)}</b> sur ${o.expo}:00, ${msg}.</p><p><b>${asked.length} questions</b> traitées. Ouvre chacune et compare avec ce que tu as réellement dit.</p></div>`+asked.map(q=>`<details class="card"><summary><b>${J[q[0]].n} :</b> ${q[1]}</summary><ul>${q[2].map(k=>`<li>${k}</li>`).join("")}</ul></details>`).join("")+`<div class="card"><h3>Grille du recruteur</h3><p class="mut">Note-toi comme un recruteur le ferait : 0 = absent, 2 = moyen, 4 = excellent.</p>${CRIT.map(c=>`<label class="ck"><span style="flex:1">${c}</span><select>${[0,1,2,3,4].map(n=>`<option ${n===2?"selected":""}>${n}</option>`).join("")}</select></label>`).join("")}<button class="btn" id="ok">Calculer ma note</button></div>`;
     bindBack(back);document.getElementById("ok").onclick=()=>{let n=0;app.querySelectorAll("select").forEach(x=>n+=+x.value);note20(o.t,n,back)}}}
 function examQCM(){AUSRC=null;const back=()=>go("exam"),pool=[];L.forEach((x,l)=>x.q.forEach((_,k)=>pool.push([l,k])));const items=shuf(pool).slice(0,30),res=[];let i=0,over=false;
   app.innerHTML=hdr("QCM · 30 questions")+`<div class="timer" id="tmr"></div><div id="qz"></div>`;bindBack(back);
@@ -1742,7 +1754,7 @@ function simHub(){const back=()=>go("exam");
   document.getElementById("dl").onclick=()=>dilem(sc=>end("dil",sc,simHub),simHub)}
 
 /* ===================== INSTALLATION ET MISE À JOUR ===================== */
-const APP_V="2026.11.16.2";let INST=null,SWR=null;
+const APP_V="2026.11.17.1";let INST=null,SWR=null;
 const standalone=()=>{try{return matchMedia("(display-mode: standalone)").matches||navigator.standalone===true}catch(e){return false}};
 try{window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();INST=e;const b=document.getElementById("inst");if(b)b.style.display="block"})}catch(e){}
 try{if("serviceWorker" in navigator&&location.protocol==="https:"&&!/claude\.ai|claudeusercontent/.test(location.host))navigator.serviceWorker.register("sw.js").then(r=>{SWR=r;r.addEventListener("updatefound",()=>{const w=r.installing;if(w)w.addEventListener("statechange",()=>{if(w.state==="installed"&&navigator.serviceWorker.controller)toast("Nouvelle version disponible : Profil → Mettre à jour.")})})}).catch(()=>{})}catch(e){}
@@ -1788,7 +1800,7 @@ window.addEventListener("hashchange",()=>{const h=location.hash.slice(1);if(["ho
 
 window.__CF={L:L,AT:typeof AT!=="undefined"?AT:null,open:(l,i)=>lire(l,[i],()=>go("fiches"),()=>go("fiches"))};
 }}));
-TRACKS.push(Object.assign({"id": "sec", "key": "ohipa-sec-v1", "ic": "🗂️", "name": "Secrétariat et accueil", "sub": "Téléphone, courrier, compte rendu, agenda, classement", "col": ["#a23b72", "#f6e1ec", "#ee9cc6", "#5a2342"]},{run:function(){
+TRACKS.push(Object.assign({"id": "sec", "key": "ohipa-sec-v1", "ic": "🗂️", "name": "Secrétariat et accueil", "sub": "Téléphone, courrier, compte rendu, agenda, classement", "col": ["#a23b72", "#f6e1ec", "#ee9cc6", "#5a2342"], "hint": "Demandé partout : bureaux, cabinets, hôtels", "ranks": ["Débutant", "Agent d'accueil", "Secrétaire", "Assistant", "Assistant confirmé", "Assistant de direction", "Office manager"]},{run:function(){
 "use strict";
 const J={"DIR": {"n": "Mme Hereiti", "r": "Directrice administrative", "c": "#7a4fa3"}, "ASS": {"n": "M. Tauhiti", "r": "Assistant de direction", "c": "#0f6e78"}, "ACC": {"n": "Mme Vaimiti", "r": "Responsable de l'accueil", "c": "#b8402a"}, "RH": {"n": "M. Ruita", "r": "Responsable du personnel", "c": "#2c8a57"}};
 const GRILLE=["Formules de politesse", "Structure claire", "Orthographe", "Informations complètes", "Ton adapté", "Relecture"];
@@ -1842,14 +1854,14 @@ function mix(n,l){ // révision : erreurs d'abord, puis tirage dans les niveaux 
   const pool=[];for(let i=0;i<=l;i++)L[i].q.forEach((_,k)=>pool.push(i+"."+k));
   const w=shuf(S.w.filter(k=>pool.includes(k))),rest=shuf(pool.filter(k=>!w.includes(k)));
   return w.concat(rest).slice(0,n).map(k=>k.split(".").map(Number));}
-function plan(l,d){const Q=a=>a.map(k=>[l,k]),m=SIMMAP[l],sn=m==="dil"?"Dilemmes du bureau":"Atelier : "+AT[+m.slice(2)].t;
+function plan(l,d){const Q=a=>a.map(k=>[l,k]),m=SIMMAP[l],sn=m==="dil"?"Dilemme du métier":"Atelier : "+AT[+m.slice(2)].t;
   return [
-  [{k:"lire",f:[0,1],m:12},{k:"quiz",q:()=>Q(rng(0,6)),m:10},{k:"sim",m:15,n:sn}],
-  [{k:"lire",f:[2,3],m:12},{k:"quiz",q:()=>Q(rng(6,12)),m:10},{k:"cas",c:[0],m:8}],
-  [{k:"oral",o:[0],m:10},{k:"cas",c:[1],m:8},{k:"quiz",q:()=>mix(8,l),m:10,n:"Révision"}],
-  [{k:"oral",o:[1],m:10},{k:"lire",f:[0,1,2,3],m:12,n:"Relecture des fiches"},{k:"quiz",q:()=>mix(10,l),m:12,n:"Révision ciblée"}],
-  [{k:"quiz",q:()=>shuf(Q(rng(0,12))),m:15,n:"Épreuve du niveau"},{k:"ecrit",m:30}]][d];}
-const LBL={sim:["🧩","Simulation"],lire:["📖","Fiches à lire"],quiz:["✅","Quiz"],cas:["🧭","Mise en situation"],oral:["🎙️","Devant le jury"],ecrit:["✍️","Cas écrit"]};
+  [{k:"lire",f:[0],m:4},{k:"quiz",q:()=>Q(rng(0,6)),m:5},{k:"cas",c:[0],m:4}],
+  [{k:"lire",f:[1],m:4},{k:"quiz",q:()=>Q(rng(6,12)),m:5},{k:"sim",m:6,n:sn}],
+  [{k:"lire",f:[2],m:4},{k:"cas",c:[1],m:4},{k:"quiz",q:()=>mix(6,l),m:4,n:"Révision"}],
+  [{k:"lire",f:[3],m:4},{k:"oral",o:[0],m:5},{k:"quiz",q:()=>mix(6,l),m:4,n:"Révision ciblée"}],
+  [{k:"oral",o:[1],m:5},{k:"quiz",q:()=>shuf(Q(rng(0,12))),m:8,n:"Défi du niveau"}]][d];}
+const LBL={sim:["🧩","Simulation"],lire:["📖","Fiches à lire"],quiz:["✅","Quiz"],cas:["🧭","Mise en situation"],oral:["🎙️","Face au recruteur"],ecrit:["✍️","Cas écrit"]};
 const sk=(l,d,i)=>l+"."+d+"."+i;
 const dayDone=(l,d)=>plan(l,d).every((_,i)=>sk(l,d,i) in S.s);
 function curDay(){for(let n=0;n<NS;n++){const l=Math.floor(n/5),d=n%5;if(!dayDone(l,d))return n}return NS}
@@ -1881,7 +1893,7 @@ function readOut(btn){
   btn.textContent="⏹ Arrêter"}catch(e){}}
 function hdr(title,back){return `<div class="top"><button class="back" id="bk">←</button><b>${title}</b><button class="au" id="au">🔊 Écouter</button></div>`}
 function bindBack(fn){const b=document.getElementById("bk");if(b)b.onclick=()=>{halt();fn()};const a=document.getElementById("au");if(a)a.onclick=()=>readOut(a)}
-function setNav(v){const it=[["home","🏝️","Accueil"],["parcours","🗺️","Parcours"],["fiches","📚","Fiches"],["exam","⏱️","Examens"],["profil","👤","Profil"]];
+function setNav(v){const it=[["home","🏝️","Accueil"],["parcours","🗺️","Parcours"],["fiches","📚","Fiches"],["exam","⏱️","Entretien"],["profil","👤","Profil"]];
   nav.innerHTML=it.map(x=>`<button class="${x[0]===v?"on":""}" data-v="${x[0]}"><span>${x[1]}</span>${x[2]}</button>`).join("");
   nav.querySelectorAll("button").forEach(b=>b.onclick=()=>go(b.dataset.v))}
 function go(v,a,b){halt();AUSRC=null;window.scrollTo(0,0);setNav(v);({home,parcours,fiches,conseil,profil,day,exam})[v](a,b);try{if(v!=="day")location.hash=v}catch(e){}}
@@ -1890,19 +1902,21 @@ function go(v,a,b){halt();AUSRC=null;window.scrollTo(0,0);setNav(v);({home,parco
 function home(){const n=curDay(),l=Math.floor(n/5),d=n%5,{r,nx}=rank(),pct=Math.round(n/NS*100);
   app.innerHTML=`<div class="band"></div><button class="chg" id="chg">⇄ Voies</button><h1>Secrétariat et accueil</h1><p class="mut">Téléphone, courrier, compte rendu, agenda, classement</p>
   <div class="card hero">${n<NS?`<small>Séance ${n+1} sur ${NS} · Niveau ${l+1}</small><h2 style="margin:4px 0">${L[l].t}</h2><small>${DAYN[d]} · environ ${plan(l,d).reduce((s,x)=>s+x.m,0)} min</small><button class="btn wh" id="goDay">Commencer la séance</button>`:`<h2 style="margin:4px 0">Parcours terminé 🎉</h2><small>Continue avec les révisions, les ateliers et les entretiens.</small>`}</div>
-  <div class="card"><div class="row"><div class="stat"><b>${streak()}</b><small>jours de suite</small></div><div class="stat"><b>${S.xp}</b><small>points</small></div><div class="stat"><b>${pct}%</b><small>parcours</small></div></div>
-  <div class="bar"><i style="width:${nx?Math.min(100,(S.xp-r[0])/(nx[0]-r[0])*100):100}%"></i></div><small>Grade : <b>${r[1]}</b>${nx?` · prochain : ${nx[1]} à ${nx[0]} points`:""}</small></div>
-  <button class="btn sec" id="rev">Réviser mes erreurs (${S.w.length})</button>
-  <button class="btn sec" id="cs">S'entraîner devant le jury</button>
-  <button class="btn sec" id="exb">Épreuves en conditions réelles</button>
-  <button class="btn sec" id="smb">Ateliers et dilemmes</button>
+  ${S.xp?`<div class="card"><div class="row"><div class="stat"><b>${streak()}</b><small>jours de suite</small></div><div class="stat"><b>${S.xp}</b><small>points</small></div><div class="stat"><b>${pct}%</b><small>parcours</small></div></div>
+  <div class="bar"><i style="width:${nx?Math.min(100,(S.xp-r[0])/(nx[0]-r[0])*100):100}%"></i></div><small>Grade : <b>${r[1]}</b>${nx?` · prochain : ${nx[1]} à ${nx[0]} points`:""}</small></div>`:`<div class="card"><h3 style="margin-top:0">Ia ora na, bienvenue !</h3><p class="mut" style="margin:0">Une séance dure 12 à 15 minutes : une fiche courte, un petit quiz, une mise en situation. Chaque étape te rapporte des points et te fait monter en grade, de ${RANKS[0][1]} à ${RANKS[RANKS.length-1][1]}.</p></div>`}
+  <div class="tiles">
+   <button class="tile" id="rev"${S.w.length?"":" hidden"}><span>🔁</span><b>Réviser</b><small>${S.w.length} erreur${S.w.length>1?"s":""} à revoir</small></button>
+   <button class="tile" id="cs"><span>🎙️</span><b>Recruteur</b><small>Questions d'entretien</small></button>
+   <button class="tile" id="exb"><span>💼</span><b>Simulation d'embauche</b><small>Entretien et test chronométrés</small></button>
+   <button class="tile" id="smb"><span>🧮</span><b>Ateliers</b><small>Calculs et dilemmes du métier</small></button>
+  </div>
   <button class="btn" id="inst" style="display:${INST&&!standalone()?"block":"none"}">📲 Installer l'application</button>
   <div class="card warn"><h3>À savoir</h3><p class="mut">Ce parcours prépare au métier et à l'entretien d'embauche. Il ne remplace ni la formation, ni les habilitations, ni les consignes de l'employeur.</p></div>`;
   const g=document.getElementById("goDay");if(g)g.onclick=()=>go("day",l,d);
   document.getElementById("rev").onclick=()=>{const it=mix(10,L.length-1);quiz(it,"Révision",sc=>{gain("",sc);go("home")},()=>go("home"))};
   document.getElementById("cs").onclick=()=>go("conseil");document.getElementById("exb").onclick=()=>go("exam");document.getElementById("smb").onclick=simHub;document.getElementById("inst").onclick=installApp}
 function parcours(){const cur=curDay();
-  app.innerHTML=`<h1>Parcours</h1><p class="mut">${L.length} niveaux · ${NS} séances d'environ 40 minutes. À 5 séances par semaine : ${L.length} semaines ; tous les jours : environ ${Math.ceil(NS/7)}.</p>`+L.map((x,l)=>`<div class="card"><div class="lvl"><div class="num">${l+1}</div><div style="flex:1"><h3>${x.t}</h3><small>${x.s}</small><div class="days">${DAYN.map((n,d)=>{const i=l*5+d,dn=dayDone(l,d),lk=!S.free&&i>cur;return `<button class="day ${dn?"done":i===cur?"cur":lk?"lock":""}" data-l="${l}" data-d="${d}" ${lk?"disabled":""}>${dn?"✓":n}</button>`}).join("")}</div></div></div></div>`).join("");
+  app.innerHTML=`<h1>Parcours</h1><p class="mut">${L.length} niveaux · ${NS} séances courtes de 12 à 15 minutes. À 5 séances par semaine : ${L.length} semaines ; tous les jours : environ ${Math.ceil(NS/7)}.</p>`+L.map((x,l)=>`<div class="card"><div class="lvl"><div class="num">${l+1}</div><div style="flex:1"><h3>${x.t}</h3><small>${x.s}</small><div class="days">${DAYN.map((n,d)=>{const i=l*5+d,dn=dayDone(l,d),lk=!S.free&&i>cur;return `<button class="day ${dn?"done":i===cur?"cur":lk?"lock":""}" data-l="${l}" data-d="${d}" ${lk?"disabled":""}>${dn?"✓":n}</button>`}).join("")}</div></div></div></div>`).join("");
   app.querySelectorAll(".day").forEach(b=>b.onclick=()=>go("day",+b.dataset.l,+b.dataset.d))}
 function day(l,d){const P=plan(l,d);
   app.innerHTML=hdr(`Niveau ${l+1} · ${DAYN[d]}`)+`<h2>${L[l].t}</h2><p class="mut">Environ ${P.reduce((s,x)=>s+x.m,0)} minutes. Fais les étapes dans l'ordre.</p>`+P.map((p,i)=>{const k=sk(l,d,i),dn=k in S.s;return `<button class="step ${dn?"done":""}" data-i="${i}"><span class="ic">${LBL[p.k][0]}</span><span><b>${p.n||LBL[p.k][1]}</b><br><small>${p.m} min</small></span>${dn?`<span class="sc">${S.s[k]}%</span>`:""}</button>`}).join("")+(dayDone(l,d)?`<div class="card" style="text-align:center"><b>Séance validée ✓</b></div>`:"");
@@ -1934,7 +1948,7 @@ function timerBox(sec){return `<div class="timer" id="tmr">${fmt(sec)}</div><div
 const fmt=s=>(s>=3600?Math.floor(s/3600)+":"+String(Math.floor(s%3600/60)).padStart(2,"0"):Math.floor(s/60))+":"+String(s%60).padStart(2,"0");
 function bindTimer(sec){let left=sec;const el=document.getElementById("tmr"),b=document.getElementById("tgo");b.onclick=()=>{if(tm){halt();b.textContent="Reprendre";return}b.textContent="Pause";tm=setInterval(()=>{left--;el.textContent=fmt(Math.max(0,left));if(left<=0){halt();el.textContent="Temps écoulé";b.disabled=true}},1000)}}
 function oral(list,done,back){AUSRC=null;let i=0,tot=0;(function show(){const [l,k]=list[i],O=L[l].o[k],j=J[O[0]];halt();window.scrollTo(0,0);
-  app.innerHTML=hdr(`Le jury · ${i+1}/${list.length}`)+`<div class="card"><div class="jur"><div class="av" style="background:${j.c}">${j.n.split(" ").pop()[0]}</div><div><b>${j.n}</b><br><small>${j.r}</small></div></div><p class="q">« ${O[1]} »</p><p class="mut">Prends une minute pour réfléchir, puis réponds <b>à voix haute</b> pendant trois minutes, comme devant le jury.</p>${timerBox(240)}<p class="mut" style="margin-top:12px">Notes (facultatif)</p><textarea id="nt" placeholder="Mots-clés de ta réponse…"></textarea><button class="btn" id="rv">Voir ce que le jury attend</button><div id="fb"></div></div>`;
+  app.innerHTML=hdr(`Le jury · ${i+1}/${list.length}`)+`<div class="card"><div class="jur"><div class="av" style="background:${j.c}">${j.n.split(" ").pop()[0]}</div><div><b>${j.n}</b><br><small>${j.r}</small></div></div><p class="q">« ${O[1]} »</p><p class="mut">Prends une minute pour réfléchir, puis réponds <b>à voix haute</b> pendant trois minutes, comme face au recruteur.</p>${timerBox(240)}<p class="mut" style="margin-top:12px">Notes (facultatif)</p><textarea id="nt" placeholder="Mots-clés de ta réponse…"></textarea><button class="btn" id="rv">Voir ce que le recruteur attend</button><div id="fb"></div></div>`;
   bindBack(back);bindTimer(240);document.getElementById("rv").onclick=e=>{halt();e.target.remove();
     document.getElementById("fb").innerHTML=`<div class="fb"><b>Coche ce que tu as vraiment dit :</b></div>${O[2].map((x,m)=>`<label class="ck"><input type="checkbox" data-m="${m}"><span>${x}</span></label>`).join("")}<button class="btn" id="nx">Valider</button>`;
     document.getElementById("nx").onclick=()=>{tot+=app.querySelectorAll("input:checked").length/O[2].length;i++;i<list.length?show():done(Math.round(tot/list.length*100))}}})()}
@@ -1945,7 +1959,7 @@ function ecrit(l,done,back,E){AUSRC=null;E=E||L[l].e;window.scrollTo(0,0);
     document.getElementById("nx").onclick=()=>done(Math.round(app.querySelectorAll("input:checked").length/GRILLE.length*100))}}
 function fiches(){app.innerHTML=`<h1>Fiches</h1><p class="mut">Tout le cours, à relire quand tu veux.</p><button class="btn sec" id="rep">📌 Aide-mémoire : les repères à connaître</button>`+L.map((x,l)=>`<div class="card"><h3>${l+1}. ${x.t}</h3>${x.f.map((f,i)=>`<button class="opt" data-l="${l}" data-i="${i}">${f[0]}</button>`).join("")}</div>`).join("");
   app.querySelectorAll(".opt").forEach(b=>b.onclick=()=>lire(+b.dataset.l,[+b.dataset.i],()=>go("fiches"),()=>go("fiches")));document.getElementById("rep").onclick=reperes}
-function conseil(){app.innerHTML=`<h1>Le jury</h1><p class="mut">Ton jury d'entraînement (personnages fictifs). Choisis qui t'interroge, ou laisse le hasard décider.</p>`+Object.keys(J).map(k=>`<button class="step" data-k="${k}"><span class="av" style="background:${J[k].c};flex:0 0 40px;height:40px">${J[k].n.split(" ").pop()[0]}</span><span><b>${J[k].n}</b><br><small>${J[k].r}</small></span></button>`).join("")+`<button class="btn" id="all">Entretien complet : 4 questions</button>`;
+function conseil(){app.innerHTML=`<h1>Les recruteurs</h1><p class="mut">Ton panel de recruteurs d'entraînement (personnages fictifs). Choisis qui t'interroge, ou laisse le hasard décider.</p>`+Object.keys(J).map(k=>`<button class="step" data-k="${k}"><span class="av" style="background:${J[k].c};flex:0 0 40px;height:40px">${J[k].n.split(" ").pop()[0]}</span><span><b>${J[k].n}</b><br><small>${J[k].r}</small></span></button>`).join("")+`<button class="btn" id="all">Entretien complet : 4 questions</button>`;
   const pick=(k,n)=>{const p=[];L.forEach((x,l)=>x.o.forEach((o,i)=>{if(!k||o[0]===k)p.push([l,i])}));return shuf(p).slice(0,n)};
   const run=list=>oral(list,sc=>end("",sc,()=>go("conseil")),()=>go("conseil"));
   app.querySelectorAll(".step").forEach(b=>b.onclick=()=>run(pick(b.dataset.k,2)));
@@ -1954,21 +1968,21 @@ function conseil(){app.innerHTML=`<h1>Le jury</h1><p class="mut">Ton jury d'entr
 function say(t){if(!TTS)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="fr-FR";u.rate=.97;const v=speechSynthesis.getVoices().find(v=>/^fr/i.test(v.lang));if(v)u.voice=v;speechSynthesis.speak(u)}catch(e){}}
 function count(sec,el,onEnd){let left=sec;el.textContent=fmt(left);if(tm)clearInterval(tm);tm=setInterval(()=>{left--;el.textContent=fmt(Math.max(0,left));if(left<=0){clearInterval(tm);tm=null;onEnd()}},1000)}
 function note20(title,n,back){S.ex.unshift([today(),title,n]);S.ex=S.ex.slice(0,30);end("",Math.round(n*5),back)}
-function exam(){app.innerHTML=`<h1>Conditions réelles</h1><p class="mut">Chrono sans pause, aucune correction avant la fin.</p>
+function exam(){app.innerHTML=`<h1>Simulation d'embauche</h1><p class="mut">Chrono sans pause, aucune correction avant la fin.</p>
   <button class="step" id="e1"><span class="ic">🎙️</span><span><b>Entretien d'embauche en secrétariat</b><br><small>20 min : 5 min de présentation, puis questions et relances</small></span></button>
-  <button class="step" id="e4"><span class="ic">✅</span><span><b>QCM de connaissances</b><br><small>30 questions en 20 min, correction à la fin</small></span></button>
+  <button class="step" id="e4"><span class="ic">✅</span><span><b>Test de connaissances</b><br><small>30 questions en 20 min, correction à la fin</small></span></button>
   <button class="btn sec" id="e6">Ateliers et dilemmes</button>
-  <button class="btn sec" id="e5">Entraînement libre devant le jury</button>
-  <div class="card"><h3>Mes résultats</h3>${S.ex.length?S.ex.map(x=>`<p style="display:flex;justify-content:space-between"><span>${x[0]} · ${x[1]}</span><b>${x[2]}/20</b></p>`).join(""):`<p class="mut">Aucune épreuve passée pour l'instant.</p>`}</div>
+  <button class="btn sec" id="e5">Entraînement libre avec le recruteur</button>
+  <div class="card"><h3>Mes résultats</h3>${S.ex.length?S.ex.map(x=>`<p style="display:flex;justify-content:space-between"><span>${x[0]} · ${x[1]}</span><b>${x[2]}/20</b></p>`).join(""):`<p class="mut">Aucune simulation passée pour l'instant.</p>`}</div>
   <div class="card warn"><h3>Ce que le jeu ne remplace pas</h3><p class="mut">Relis toujours avant d'envoyer : l'orthographe compte beaucoup dans ce métier.</p></div>`;
   const pool=()=>{const p=X.slice();L.forEach(x=>x.o.forEach(o=>p.push(o)));return p};
   document.getElementById("e1").onclick=()=>examOral({t:"Entretien secrétariat",expo:5,total:20,pool});
   document.getElementById("e4").onclick=examQCM;document.getElementById("e5").onclick=()=>go("conseil");document.getElementById("e6").onclick=simHub}
 function examOral(o){AUSRC=null;const back=()=>go("exam"),asked=[];
-  app.innerHTML=hdr(o.t)+`<div class="card fiche"><h2 style="margin-top:0">Déroulement</h2><ul><li><b>${o.expo} minutes</b> d'exposé : ton parcours et ton projet. À la fin du temps, le jury te coupe.</li><li>Puis des questions jusqu'à <b>${o.total} minutes</b> au total, sans préparation, avec des relances.</li><li>Réponds <b>à voix haute</b>. Tu ne verras les attendus qu'au débriefing.</li><li>Aucune pause. Quitter l'écran annule l'épreuve.</li></ul><label class="ck" style="border:0"><input type="checkbox" id="vx" ${TTS?"checked":"disabled"}><span>Le jury pose ses questions à voix haute${TTS?"":" (indisponible sur cet appareil)"}</span></label><button class="btn" id="st">Entrer dans la salle</button></div>`;
+  app.innerHTML=hdr(o.t)+`<div class="card fiche"><h2 style="margin-top:0">Déroulement</h2><ul><li><b>${o.expo} minutes</b> d'exposé : ton parcours et ton projet. À la fin du temps, le recruteur te coupe.</li><li>Puis des questions jusqu'à <b>${o.total} minutes</b> au total, sans préparation, avec des relances.</li><li>Réponds <b>à voix haute</b>. Tu ne verras les attendus qu'au débriefing.</li><li>Aucune pause. Quitter l'écran annule l'épreuve.</li></ul><label class="ck" style="border:0"><input type="checkbox" id="vx" ${TTS?"checked":"disabled"}><span>Le recruteur pose ses questions à voix haute${TTS?"":" (indisponible sur cet appareil)"}</span></label><button class="btn" id="st">Entrer dans la salle</button></div>`;
   bindBack(back);document.getElementById("st").onclick=()=>p1(document.getElementById("vx").checked);
   function p1(voice){const line=`Bonjour. Installez-vous. Vous avez ${o.expo} minutes pour vous présenter, nous vous écoutons.`,t0=Date.now();window.scrollTo(0,0);
-    app.innerHTML=`<div class="card"><span class="tag">Exposé</span><p class="q">« ${line} »</p><div class="timer" id="tmr"></div><p class="mut">Regarde l'écran comme tu regarderais le jury. Ne lis pas tes notes.</p><button class="btn" id="nx">J'ai terminé mon exposé</button></div>`;
+    app.innerHTML=`<div class="card"><span class="tag">Exposé</span><p class="q">« ${line} »</p><div class="timer" id="tmr"></div><p class="mut">Regarde l'écran comme tu regarderais le recruteur. Ne lis pas tes notes.</p><button class="btn" id="nx">J'ai terminé mon exposé</button></div>`;
     if(voice)say(line);const nx=cut=>{clearInterval(tm);tm=null;p2(voice,cut,Math.round((Date.now()-t0)/1000))};
     count(o.expo*60,document.getElementById("tmr"),()=>nx(true));document.getElementById("nx").onclick=()=>nx(false)}
   function p2(voice,cut,used){const qs=shuf(o.pool()).slice(0,16);let i=-1,rel=false,over=false;window.scrollTo(0,0);
@@ -1978,8 +1992,8 @@ function examOral(o){AUSRC=null;const back=()=>go("exam"),asked=[];
     const put=(q,txt,pre)=>{const j=J[q[0]];document.getElementById("qz").innerHTML=`<div class="jur"><div class="av" style="background:${j.c}">${j.n.split(" ").pop()[0]}</div><div><b>${j.n}</b><br><small>${j.r}</small></div></div><p class="q">« ${pre||""}${txt} »</p>`;if(voice)say((pre||"")+txt)};
     const nxt=()=>{if(!rel&&i>=0&&Math.random()<.35){rel=true;put(qs[i],RELANCES[Math.floor(Math.random()*RELANCES.length)])}else{rel=false;i++;if(i>=qs.length)return fin();asked.push(qs[i]);put(qs[i],qs[i][1],i===0&&cut?"Je vous interromps, le temps de l'exposé est écoulé. ":"")}};
     document.getElementById("nx").onclick=nxt;nxt()}
-  function debrief(cut,used){const tgt=o.expo*60,msg=cut?"interrompu par le jury : exposé trop long ou mal minuté":used<tgt*.6?"nettement trop court : tu laisses du temps aux questions difficiles":"durée correcte";window.scrollTo(0,0);
-    app.innerHTML=hdr("Débriefing")+`<div class="card"><p><b>Exposé : ${fmt(used)}</b> sur ${o.expo}:00, ${msg}.</p><p><b>${asked.length} questions</b> traitées. Ouvre chacune et compare avec ce que tu as réellement dit.</p></div>`+asked.map(q=>`<details class="card"><summary><b>${J[q[0]].n} :</b> ${q[1]}</summary><ul>${q[2].map(k=>`<li>${k}</li>`).join("")}</ul></details>`).join("")+`<div class="card"><h3>Grille du jury</h3><p class="mut">Note-toi comme un jury le ferait : 0 = absent, 2 = moyen, 4 = excellent.</p>${CRIT.map(c=>`<label class="ck"><span style="flex:1">${c}</span><select>${[0,1,2,3,4].map(n=>`<option ${n===2?"selected":""}>${n}</option>`).join("")}</select></label>`).join("")}<button class="btn" id="ok">Calculer ma note</button></div>`;
+  function debrief(cut,used){const tgt=o.expo*60,msg=cut?"interrompu par le recruteur : exposé trop long ou mal minuté":used<tgt*.6?"nettement trop court : tu laisses du temps aux questions difficiles":"durée correcte";window.scrollTo(0,0);
+    app.innerHTML=hdr("Débriefing")+`<div class="card"><p><b>Exposé : ${fmt(used)}</b> sur ${o.expo}:00, ${msg}.</p><p><b>${asked.length} questions</b> traitées. Ouvre chacune et compare avec ce que tu as réellement dit.</p></div>`+asked.map(q=>`<details class="card"><summary><b>${J[q[0]].n} :</b> ${q[1]}</summary><ul>${q[2].map(k=>`<li>${k}</li>`).join("")}</ul></details>`).join("")+`<div class="card"><h3>Grille du recruteur</h3><p class="mut">Note-toi comme un recruteur le ferait : 0 = absent, 2 = moyen, 4 = excellent.</p>${CRIT.map(c=>`<label class="ck"><span style="flex:1">${c}</span><select>${[0,1,2,3,4].map(n=>`<option ${n===2?"selected":""}>${n}</option>`).join("")}</select></label>`).join("")}<button class="btn" id="ok">Calculer ma note</button></div>`;
     bindBack(back);document.getElementById("ok").onclick=()=>{let n=0;app.querySelectorAll("select").forEach(x=>n+=+x.value);note20(o.t,n,back)}}}
 function examQCM(){AUSRC=null;const back=()=>go("exam"),pool=[];L.forEach((x,l)=>x.q.forEach((_,k)=>pool.push([l,k])));const items=shuf(pool).slice(0,30),res=[];let i=0,over=false;
   app.innerHTML=hdr("QCM · 30 questions")+`<div class="timer" id="tmr"></div><div id="qz"></div>`;bindBack(back);
@@ -2027,7 +2041,7 @@ function simHub(){const back=()=>go("exam");
   document.getElementById("dl").onclick=()=>dilem(sc=>end("dil",sc,simHub),simHub)}
 
 /* ===================== INSTALLATION ET MISE À JOUR ===================== */
-const APP_V="2026.11.16.2";let INST=null,SWR=null;
+const APP_V="2026.11.17.1";let INST=null,SWR=null;
 const standalone=()=>{try{return matchMedia("(display-mode: standalone)").matches||navigator.standalone===true}catch(e){return false}};
 try{window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();INST=e;const b=document.getElementById("inst");if(b)b.style.display="block"})}catch(e){}
 try{if("serviceWorker" in navigator&&location.protocol==="https:"&&!/claude\.ai|claudeusercontent/.test(location.host))navigator.serviceWorker.register("sw.js").then(r=>{SWR=r;r.addEventListener("updatefound",()=>{const w=r.installing;if(w)w.addEventListener("statechange",()=>{if(w.state==="installed"&&navigator.serviceWorker.controller)toast("Nouvelle version disponible : Profil → Mettre à jour.")})})}).catch(()=>{})}catch(e){}
@@ -2076,7 +2090,7 @@ window.__CF={L:L,AT:typeof AT!=="undefined"?AT:null,open:(l,i)=>lire(l,[i],()=>g
 /* ===================== ÉCRAN D'ENTRÉE : CHOIX DE LA VOIE ===================== */
 (function(){
 "use strict";
-const V="2026.11.16.2",app=document.getElementById("app");
+const V="2026.11.17.1",app=document.getElementById("app");
 const ls=k=>{try{return localStorage.getItem(k)}catch(e){return null}};
 const js=k=>{try{return JSON.parse(ls(k)||"null")}catch(e){return null}};
 
@@ -2128,9 +2142,6 @@ function start(t,then){try{localStorage.setItem("oh-voie",t.id)}catch(e){}
   const toHub=()=>{try{localStorage.setItem("oh-hub","1")}catch(_){}try{history.replaceState(null,"",location.pathname+location.search)}catch(_){}
     try{location.reload()}catch(_){}setTimeout(()=>{try{location.replace(location.pathname+location.search)}catch(_){}},400)};
   document.addEventListener("click",e=>{if(e.target&&e.target.closest&&e.target.closest("#chg,#navvoies"))toHub()},true);
-  // Bouton « Voies » toujours présent dans la barre du bas, sur tous les écrans de la voie.
-  const nav=document.getElementById("nav"),addBtn=()=>{if(!nav.querySelector("#navvoies")&&nav.children.length){const x=document.createElement("button");x.id="navvoies";x.innerHTML="<span>⇄</span>Voies";nav.appendChild(x)}};
-  try{new MutationObserver(addBtn).observe(nav,{childList:true})}catch(_){}
   // Bouton retour du téléphone : revenir au début de la voie ramène au choix des voies.
   window.addEventListener("hashchange",()=>{if(!location.hash)toHub()});
   const tst=document.getElementById("tst");if(tst)tst.remove();
@@ -2194,11 +2205,35 @@ function result(r){window.scrollTo(0,0);const T=id=>TRACKS.find(t=>t.id===id);
 function ORI(){const r=QR();if(!r)return `<div class="card hero" style="background:linear-gradient(135deg,#0f6e78,#2c8a57)"><small>Tu hésites ?</small><h2 style="margin:4px 0;color:#fff">🧭 Trouve ta voie en 3 minutes</h2><button class="btn wh" id="qz" style="color:#0f6e78">Faire le quiz d'orientation</button></div>`;
   const t=TRACKS.find(x=>x.id===r.top[0]);return `<div class="card"><small class="mut">Ton orientation (quiz du ${r.d.split("-").reverse().join("/")})</small><p style="margin:6px 0"><b>${t.ic} ${t.name}</b> · ${r.pct[0][1]} % · puis ${r.top.slice(1).map(id=>TRACKS.find(x=>x.id===id).name).join(", ")}</p><button class="btn sec" id="qz">🔁 Refaire le quiz</button></div>`}
 
+
+const DLEN=[3,3,3,3,2],RK=[0,150,400,800,1300,1900,2600];
+function prog(t){const S=js(t.key)||{};const s=S.s||{};let done=0;for(let l=0;l<3;l++)for(let d=0;d<5;d++){let ok=true;for(let i=0;i<DLEN[d];i++)if(!((l+"."+d+"."+i) in s))ok=false;if(ok)done++}
+  const xp=S.xp||0;let g=t.ranks[0];RK.forEach((v,k)=>{if(xp>=v)g=t.ranks[k]});const ex=(S.ex||[]);const best=ex.length?Math.max(...ex.map(x=>+x[2]||0)):null;
+  return {done,lvl:Math.min(3,Math.floor(done/5)+1),xp,g,ex:ex.length,best,steps:Object.keys(s).length,days:(S.days||[]).length,last:(S.days||[]).slice(-1)[0]||null}}
+function fiche(){window.scrollTo(0,0);document.getElementById("nav").innerHTML="";const r=QR(),d=new Date().toLocaleDateString("fr-FR"),P=TRACKS.map(t=>[t,prog(t)]),act=P.filter(x=>x[1].steps);
+  const fmt=x=>x?x.split("-").reverse().join("/"):"—";
+  app.innerHTML=`<div class="noprint"><button class="chg" id="fx">← Retour</button></div><div class="band"></div><h1>Ma fiche de progression</h1><p class="mut">Te ʻOhipa · éditée le ${d}</p>
+   ${r?`<div class="card"><h3 style="margin-top:0">Orientation</h3><p style="margin:0">Quiz du ${fmt(r.d)} : ${r.pct.slice(0,3).map(([id,p])=>{const t=TRACKS.find(x=>x.id===id);return `<b>${t.name}</b> ${p} %`}).join(" · ")}</p></div>`:`<div class="card"><p class="mut" style="margin:0">Quiz d'orientation pas encore fait.</p></div>`}
+   ${act.length?act.map(([t,p])=>`<div class="card" style="border-left:6px solid ${t.col[0]}"><h3 style="margin-top:0">${t.ic} ${t.name}</h3>
+     <div class="bar"><i style="width:${Math.round(p.done/15*100)}%;background:${t.col[0]}"></i></div>
+     <table style="width:100%;font-size:14.5px;margin-top:8px;border-collapse:collapse">
+      <tr><td>Séances validées</td><td style="text-align:right"><b>${p.done} / 15</b> (niveau ${p.lvl} sur 3)</td></tr>
+      <tr><td>Exercices réussis</td><td style="text-align:right"><b>${p.steps}</b></td></tr>
+      <tr><td>Points · grade</td><td style="text-align:right"><b>${p.xp}</b> · ${p.g}</td></tr>
+      <tr><td>Simulations d'embauche</td><td style="text-align:right">${p.ex?`<b>${p.ex}</b> · meilleure note ${p.best}/20`:"aucune"}</td></tr>
+      <tr><td>Jours d'entraînement</td><td style="text-align:right"><b>${p.days}</b> · dernier le ${fmt(p.last)}</td></tr></table></div>`).join(""):`<div class="card"><p class="mut" style="margin:0">Aucune voie commencée pour l'instant.</p></div>`}
+   <p class="mut" style="font-size:13px">Cette fiche résume l'entraînement fait dans l'application. Ce n'est ni une attestation, ni un diplôme.</p>
+   <div class="noprint"><button class="btn" id="fp">🖨️ Imprimer ou enregistrer en PDF</button><button class="btn sec" id="fs">📤 Partager</button></div>`;
+  document.getElementById("fx").onclick=hub;document.getElementById("fp").onclick=()=>window.print();
+  document.getElementById("fs").onclick=()=>{const txt="Ma progression Te ʻOhipa ("+d+")\n"+(r?"Orientation : "+r.top.map(id=>TRACKS.find(x=>x.id===id).name).join(", ")+"\n":"")+act.map(([t,p])=>`${t.name} : ${p.done}/15 séances, niveau ${p.lvl}, ${p.xp} points (${p.g})`+(p.ex?`, simulation ${p.best}/20`:"")).join("\n");
+    if(navigator.share)navigator.share({title:"Ma progression Te ʻOhipa",text:txt}).catch(()=>{});else{try{navigator.clipboard.writeText(txt);toast("Résumé copié : colle-le dans un message.")}catch(e){toast("Partage indisponible sur cet appareil.")}}}}
+
 function hub(){window.scrollTo(0,0);const last=ls("oh-voie"),lt=TRACKS.find(t=>t.id===last),apk=apkUrl();
   app.innerHTML=`<div class="band"></div><h1>Te ʻOhipa</h1><p class="mut"><b>Trouve ton métier</b> · 7 métiers qui recrutent au fenua</p>`+ORI()+
   (lt?`<div class="card hero"><small>Reprendre</small><h2 style="margin:4px 0 0;color:#fff">${lt.ic} ${lt.name}</h2><button class="btn wh" id="resume" style="color:${lt.col[0]}">Continuer</button></div>`:"")+
-  `<div class="card" id="scard"><h3 style="margin-top:0">🔎 Rechercher une fiche</h3><input id="sq" type="search" enterkeyhint="search" autocomplete="off" placeholder="Ex. : monnaie, check-in, TVA, consignation…" style="width:100%;box-sizing:border-box;font-size:16px;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)"><div id="sres"></div></div><h2>Les voies</h2>`+TRACKS.map(t=>{const S=js(t.key),n=S&&S.s?Object.keys(S.s).length:0,xp=S&&S.xp||0;
-    return `<button class="step voie" data-t="${t.id}"><span class="ic" style="background:${t.col[1]};color:${t.col[0]}">${t.ic}</span><span style="flex:1"><b>${t.name}</b>${QR()&&QR().top.includes(t.id)?` <small style="background:#fff4c2;color:#7a5600;border-radius:999px;padding:1px 8px;font-weight:700">conseillée</small>`:""}<br><small>${t.sub}</small><br><small style="color:${n?"var(--ok)":"var(--mut)"}">${n?n+" étapes validées · "+xp+" points":"Pas encore commencé"}</small></span><span aria-hidden="true">›</span></button>`}).join("")+
+  `<h2>Les voies</h2><div class="vgrid">`+TRACKS.map(t=>{const p=prog(t),rec=QR()&&QR().top.includes(t.id);
+    return `<button class="vt" data-t="${t.id}" style="--c:${t.col[0]};--c2:${t.col[1]}"><span class="vi">${t.ic}</span>${rec?`<em>conseillée</em>`:""}<b>${t.name}</b><small>${t.hint}</small>${p.steps?`<span class="vb"><i style="width:${Math.max(6,Math.round(p.done/15*100))}%"></i></span><small class="vs">Niveau ${p.lvl} · ${p.xp} pts</small>`:""}</button>`}).join("")+`</div>`+
+  `<button class="btn sec" id="fiche">📄 Ma fiche de progression</button>`+`<div class="card" id="scard"><h3 style="margin-top:0">🔎 Rechercher une fiche</h3><input id="sq" type="search" enterkeyhint="search" autocomplete="off" placeholder="Ex. : monnaie, check-in, TVA, consignation…" style="width:100%;box-sizing:border-box;font-size:16px;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)"><div id="sres"></div></div>`+
   `<div class="card" id="appcard"><h3>Application</h3><p class="mut" id="ver">Version ${V}${standalone()?" · installée":""}</p><div id="upbar" style="display:none;height:8px;border-radius:5px;background:var(--line);overflow:hidden;margin:8px 0"><i style="display:block;height:100%;width:5%;background:var(--ok);transition:width .2s"></i></div>
    <button class="btn" id="upd">🔄 Mettre à jour</button>${inApk?"":`<button class="btn sec" id="ins">📲 Installer sur le téléphone</button>`}${apk&&!inApk?`<a class="btn sec" id="apk" href="${apk}" style="text-decoration:none">⬇️ Télécharger l'APK Android</a>`:""}
    <p class="mut" style="margin-top:10px">Ta progression est enregistrée sur cet appareil, avec une copie de secours${NAT?" dans l'application Android":""}.</p>
@@ -2207,11 +2242,11 @@ function hub(){window.scrollTo(0,0);const last=ls("oh-voie"),lt=TRACKS.find(t=>t
    <button class="btn sec" id="bk">Créer mon code de sauvegarde</button><textarea id="bkt" style="min-height:70px;display:none" readonly></textarea>
    <textarea id="rst" style="min-height:60px;margin-top:8px" placeholder="Colle ici un code de sauvegarde…"></textarea><button class="btn sec" id="rsb">Restaurer</button></details>
    ${location.protocol==="file:"?`<p class="mut" style="color:var(--cor)">Tu utilises la copie hors ligne de l'application. Touche « Mettre à jour » pour revenir à la version en ligne quand tu as du réseau.</p>`:""}</div>
-  <div class="card warn"><h3>À savoir</h3><p class="mut">Outil d'entraînement : il ne délivre aucun diplôme. Elle prépare aux métiers et aux entretiens d'embauche ; les formations, habilitations et règles de chaque entreprise font foi.</p></div>`;
+  <div class="card warn"><h3>À savoir</h3><p class="mut">Te ʻOhipa donne un avant-goût des métiers et prépare aux entretiens d'embauche. Il ne remplace ni le formateur, ni la formation, ni le diplôme ; les habilitations et les règles de chaque entreprise font foi.</p></div>`;
   document.getElementById("nav").innerHTML="";
   const sq=document.getElementById("sq");let st0;sq.oninput=()=>{clearTimeout(st0);if(!sq.value)try{localStorage.removeItem("oh-q")}catch(_){}st0=setTimeout(()=>search(sq.value),150)};sq.onkeydown=e=>{if(e.key==="Enter"){sq.blur();search(sq.value)}};const q0=ls("oh-q");if(q0){sq.value=q0;search(q0)}
   app.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>start(TRACKS.find(t=>t.id===b.dataset.t)));
-  const qz=document.getElementById("qz");if(qz)qz.onclick=()=>quiz();
+  const qz=document.getElementById("qz");if(qz)qz.onclick=()=>quiz();document.getElementById("fiche").onclick=fiche;
   const r=document.getElementById("resume");if(r)r.onclick=()=>start(lt);
   document.getElementById("upd").onclick=updateApp;
   document.getElementById("bk").onclick=()=>{const t=document.getElementById("bkt");t.value=backupCode();t.style.display="block";t.select();try{navigator.clipboard.writeText(t.value).then(()=>toast("Code copié."),()=>{})}catch(e){}};
